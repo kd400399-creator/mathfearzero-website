@@ -306,22 +306,54 @@ MFZ
 <h3>👨‍🏫 MFZ Buddy</h3>
 
 <p>Hi! How can I help you?</p>
+  <div id="buddyMessages"></div>
 
-<input type="text" placeholder="Type your doubt...">
+<input type="text" id="buddyInput" placeholder="Type your doubt...">
 
-<button>Send</button>
+<button onclick="sendMessage()">Send</button>
 
 </div>
   <script>
+
 function toggleBuddy(){
+
 const chat = document.getElementById("buddyChat");
 
 if(chat.style.display === "block"){
+
 chat.style.display = "none";
+
 }else{
+
 chat.style.display = "block";
+
 }
+
 }
+
+
+function sendMessage(){
+
+const input = document.getElementById("buddyInput");
+
+const messages = document.getElementById("buddyMessages");
+
+const message = input.value.trim();
+
+if(message === ""){
+
+return;
+
+}
+
+messages.innerHTML +=
+
+"<p><b>You:</b> " + message + "</p>";
+
+input.value = "";
+
+}
+
 </script>
 </body>
 </html>
