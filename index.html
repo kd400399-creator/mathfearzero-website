@@ -349,6 +349,11 @@ return;
 messages.innerHTML +=
 
 "<p><b>You:</b> " + message + "</p>";
+  const buddyReply = document.createElement("p");
+
+buddyReply.innerHTML = "<b>MFZ Buddy:</b> Thanks! I received your question.";
+
+messages.appendChild(buddyReply);
 
 input.value = "";
 
