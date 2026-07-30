@@ -72,120 +72,33 @@ padding-left:25px;
 }
 
 .rules li{
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
-.button{
+.notice{
+margin-top:25px;
+padding:18px;
+background:#0b1220;
+border-radius:12px;
+color:#d4d4d4;
+line-height:28px;
+}
+
+.start{
 display:block;
 width:fit-content;
 margin:35px auto 0;
 background:#ff9800;
 color:white;
-border:none;
+text-decoration:none;
 padding:15px 30px;
 border-radius:10px;
 font-size:18px;
 font-weight:bold;
-cursor:pointer;
 }
 
-.button:hover{
+.start:hover{
 background:#00c8ff;
-}
-
-.hidden{
-display:none;
-}
-
-.top-bar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-}
-
-.timer{
-background:#ff9800;
-padding:10px 18px;
-border-radius:8px;
-font-weight:bold;
-}
-
-.question{
-font-size:23px;
-margin-bottom:25px;
-line-height:34px;
-}
-
-.option{
-display:block;
-background:#0b1220;
-padding:15px;
-margin:12px 0;
-border-radius:10px;
-cursor:pointer;
-}
-
-.option:hover{
-background:#1d4ed8;
-}
-
-.option input{
-margin-right:10px;
-}
-
-.controls{
-display:flex;
-justify-content:space-between;
-gap:15px;
-margin-top:30px;
-}
-
-.controls button{
-border:none;
-padding:13px 22px;
-border-radius:8px;
-background:#00c8ff;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-.controls button:last-child{
-background:#ff9800;
-}
-
-.result{
-text-align:center;
-}
-
-.score{
-font-size:55px;
-color:#00d4ff;
-margin:25px 0;
-}
-
-.message{
-font-size:20px;
-color:#d4d4d4;
-}
-
-@media(max-width:600px){
-
-.box{
-margin:20px 12px;
-padding:25px;
-}
-
-.question{
-font-size:19px;
-}
-
-.top-bar{
-flex-direction:column;
-gap:15px;
-}
-
 }
 
 </style>
@@ -206,357 +119,48 @@ Home
 
 </nav>
 
-
-<div class="box" id="rulesPage">
+<div class="box">
 
 <h1>🏆 MFZ Mega Test</h1>
 
-<h2>📜 Test Rules</h2>
+<h2>📜 Test Rules & Instructions</h2>
 
 <ol class="rules">
 
-<li>All questions must be solved by you.</li>
+<li>Read all questions carefully before answering.</li>
 
-<li>Do not use Google, books or another website.</li>
-
-<li>Do not ask anyone for answers.</li>
+<li>Complete the test honestly by yourself.</li>
 
 <li>Do not copy or share answers.</li>
 
-<li>Read every question carefully.</li>
+<li>Do not use unfair methods during the test.</li>
 
-<li>The test has a time limit of 10 minutes.</li>
+<li>Fill your correct name and class in the test form.</li>
 
-<li>Submit the test before the timer ends.</li>
+<li>Check your answers before submitting the form.</li>
 
-<li>Unfair activity may cancel your result.</li>
+<li>Submit the test only once.</li>
+
+<li>The MFZ team will check the responses.</li>
+
+<li>Results, rankings and certificates will be announced by MFZ.</li>
 
 </ol>
 
-<button class="button" onclick="startTest()">
+<div class="notice">
 
-▶ START TEST
-
-</button>
-
-</div>
-
-
-<div class="box hidden" id="testPage">
-
-<div class="top-bar">
-
-<h2 id="questionNumber">
-
-Question 1 of 5
-
-</h2>
-
-<div class="timer">
-
-⏱️ <span id="time">10:00</span>
+📢 <b>Important:</b> Your result will not be shown immediately.
+The MFZ team will check the test and announce the result later.
 
 </div>
 
-</div>
+<a href="#" class="start">
 
-<div class="question" id="questionText">
-
-</div>
-
-<div id="options">
-
-</div>
-
-<div class="controls">
-
-<button onclick="previousQuestion()">
-
-← Previous
-
-</button>
-
-<button onclick="nextQuestion()">
-
-Next →
-
-</button>
-
-</div>
-
-<button class="button" onclick="submitTest()">
-
-Submit Test
-
-</button>
-
-</div>
-
-
-<div class="box hidden result" id="resultPage">
-
-<h1>🏆 Test Result</h1>
-
-<p class="message">
-
-Your Score
-
-</p>
-
-<div class="score" id="score">
-
-0/5
-
-</div>
-
-<p class="message" id="resultMessage">
-
-</p>
-
-<a href="index.html" class="button">
-
-Go to Home
+▶ START MEGA TEST
 
 </a>
 
 </div>
-
-
-<script>
-
-const questions = [
-
-{
-
-question:"What is 25 + 17?",
-
-options:["40","42","43","45"],
-
-answer:1
-
-},
-
-{
-
-question:"Which planet is known as the Red Planet?",
-
-options:["Earth","Mars","Jupiter","Venus"],
-
-answer:1
-
-},
-
-{
-
-question:"What is the value of 8 × 7?",
-
-options:["54","56","64","48"],
-
-answer:1
-
-},
-
-{
-
-question:"Which gas do plants use for photosynthesis?",
-
-options:["Oxygen","Nitrogen","Carbon Dioxide","Hydrogen"],
-
-answer:2
-
-},
-
-{
-
-question:"What is the square of 9?",
-
-options:["18","72","81","90"],
-
-answer:2
-
-}
-
-];
-
-
-let currentQuestion = 0;
-
-let answers = new Array(questions.length).fill(null);
-
-let timeLeft = 600;
-
-let timer;
-
-
-function startTest(){
-
-document.getElementById("rulesPage").classList.add("hidden");
-
-document.getElementById("testPage").classList.remove("hidden");
-
-showQuestion();
-
-startTimer();
-
-}
-
-
-function showQuestion(){
-
-const q = questions[currentQuestion];
-
-document.getElementById("questionNumber").innerHTML =
-
-"Question " + (currentQuestion + 1) +
-
-" of " + questions.length;
-
-document.getElementById("questionText").innerHTML =
-
-q.question;
-
-let optionsHTML = "";
-
-for(let i = 0; i < q.options.length; i++){
-
-const checked = answers[currentQuestion] === i ?
-
-"checked" : "";
-
-optionsHTML +=
-
-'<label class="option">' +
-
-'<input type="radio" name="answer" value="' + i +
-
-'" ' + checked +
-
-' onchange="saveAnswer(' + i + ')">' +
-
-q.options[i] +
-
-'</label>';
-
-}
-
-document.getElementById("options").innerHTML =
-
-optionsHTML;
-
-}
-
-
-function saveAnswer(answer){
-
-answers[currentQuestion] = answer;
-
-}
-
-
-function nextQuestion(){
-
-if(currentQuestion < questions.length - 1){
-
-currentQuestion++;
-
-showQuestion();
-
-}
-
-}
-
-
-function previousQuestion(){
-
-if(currentQuestion > 0){
-
-currentQuestion--;
-
-showQuestion();
-
-}
-
-}
-
-
-function startTimer(){
-
-timer = setInterval(function(){
-
-timeLeft--;
-
-const minutes = Math.floor(timeLeft / 60);
-
-const seconds = timeLeft % 60;
-
-document.getElementById("time").innerHTML =
-
-minutes + ":" +
-
-(seconds < 10 ? "0" : "") +
-
-seconds;
-
-if(timeLeft <= 0){
-
-clearInterval(timer);
-
-submitTest();
-
-}
-
-},1000);
-
-}
-
-
-function submitTest(){
-
-clearInterval(timer);
-
-let score = 0;
-
-for(let i = 0; i < questions.length; i++){
-
-if(answers[i] === questions[i].answer){
-
-score++;
-
-}
-
-}
-
-document.getElementById("testPage").classList.add("hidden");
-
-document.getElementById("resultPage").classList.remove("hidden");
-
-document.getElementById("score").innerHTML =
-
-score + "/" + questions.length;
-
-let message = "";
-
-if(score === 5){
-
-message = "Excellent! Perfect score! 🎉";
-
-}else if(score >= 3){
-
-message = "Good job! Keep learning. 👍";
-
-}else{
-
-message = "Keep practicing. You can improve! 📚";
-
-}
-
-document.getElementById("resultMessage").innerHTML =
-
-message;
-
-}
-
-</script>
 
 </body>
 
