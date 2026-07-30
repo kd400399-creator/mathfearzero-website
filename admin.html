@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MFZ Admin Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+}
+
+nav{
+background:#111827;
+padding:20px 8%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.admin{
+background:#ff9800;
+padding:10px 18px;
+border-radius:8px;
+}
+
+.main{
+padding:50px 8%;
+}
+
+.main h1{
+font-size:40px;
+margin-bottom:10px;
+}
+
+.main p{
+color:#d4d4d4;
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+.card{
+background:#16213e;
+padding:30px;
+border-radius:18px;
+}
+
+.card h2{
+color:#00d4ff;
+margin-bottom:15px;
+}
+
+.card button{
+background:#ff9800;
+color:white;
+border:none;
+padding:12px 18px;
+border-radius:8px;
+cursor:pointer;
+margin-top:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+MFZ
+</div>
+
+<div class="admin">
+👑 Admin Panel
+</div>
+
+</nav>
+
+<section class="main">
+
+<h1>
+Welcome, Admin 👑
+</h1>
+
+<p>
+Manage your MFZ Learning website from here.
+</p>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>
+👨‍🏫 Teacher Requests
+</h2>
+
+<p>
+Approve or reject teacher requests.
+</p>
+
+<button>
+View Requests
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+👨‍🎓 Students
+</h2>
+
+<p>
+View registered students.
+</p>
+
+<button>
+View Students
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+📚 Batches
+</h2>
+
+<p>
+Manage Foundation, Class 6 and Class 7 batches.
+</p>
+
+<button>
+Manage Batches
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>
+📺 Classes
+</h2>
+
+<p>
+Add live and recorded classes.
+</p>
+
+<button>
+Manage Classes
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</body>
+
+</html>
