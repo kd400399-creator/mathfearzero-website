@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>
+MFZ Teacher Dashboard
+</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+text-align:center;
+padding:70px 20px;
+}
+
+.box{
+max-width:650px;
+margin:auto;
+background:#16213e;
+padding:40px;
+border-radius:20px;
+}
+
+h1{
+color:#00d4ff;
+}
+
+button{
+margin-top:25px;
+background:#ff9800;
+color:white;
+border:none;
+padding:13px 25px;
+border-radius:8px;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1 id="title">
+
+Checking Teacher Access...
+
+</h1>
+
+<p id="text">
+
+Please wait.
+
+</p>
+
+<button
+onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+<script type="module">
+
+import {
+initializeApp
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged,
+signOut
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
+
+authDomain:
+"mfz-learning.firebaseapp.com",
+
+projectId:
+"mfz-learning",
+
+storageBucket:
+"mfz-learning.firebasestorage.app",
+
+messagingSenderId:
+"793150284094",
+
+appId:
+"1:793150284094:web:17ebcdc2bab15141c28c6f"
+
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+
+onAuthStateChanged(
+
+auth,
+
+async(user)=>{
+
+if(
+!user
+){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+
+const profile =
+
+await getDoc(
+
+doc(
+db,
+"users",
+user.uid
+)
+
+);
+
+
+if(
+!profile.exists()
+){
+
+return;
+
+}
+
+
+const data =
+profile.data();
+
+
+if(
+data.role !==
+"teacher"
+){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+
+if(
+data.status ===
+"pending"
+){
+
+document
+.getElementById(
+"title"
+)
+.innerHTML =
+"⏳ Teacher Approval Pending";
+
+document
+.getElementById(
+"text"
+)
+.innerHTML =
+"Your teacher account is waiting for Admin approval.";
+
+}
+
+else if(
+
+data.status ===
+"approved"
+
+){
+
+document
+.getElementById(
+"title"
+)
+.innerHTML =
+"👨‍🏫 Teacher Dashboard";
+
+document
+.getElementById(
+"text"
+)
+.innerHTML =
+"Your account is approved. Teacher controls will appear here.";
+
+}
+
+else{
+
+document
+.getElementById(
+"title"
+)
+.innerHTML =
+"❌ Teacher Request Rejected";
+
+}
+
+}
+
+);
+
+
+window.logout =
+async function(){
+
+await signOut(auth);
+
+window.location.href =
+"index.html";
+
+};
+
+</script>
+
+</body>
+
+</html>
