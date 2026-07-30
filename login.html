@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MFZ Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.box{
+width:100%;
+max-width:430px;
+background:#16213e;
+padding:35px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.logo{
+text-align:center;
+font-size:35px;
+font-weight:bold;
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+.roles{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+}
+
+.role{
+flex:1;
+padding:12px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.active{
+background:#ff9800;
+color:white;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:none;
+border-radius:8px;
+font-size:16px;
+}
+
+button{
+padding:14px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.main{
+width:100%;
+background:#ff9800;
+color:white;
+margin-bottom:10px;
+}
+
+.create{
+width:100%;
+background:#00c8ff;
+color:white;
+}
+
+.message{
+text-align:center;
+margin-top:15px;
+color:#00d4ff;
+}
+
+.back{
+display:block;
+text-align:center;
+margin-top:20px;
+color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<div class="logo">
+MFZ
+</div>
+
+<h2 id="heading">
+Student Login
+</h2>
+
+<div class="roles">
+
+<button
+class="role active"
+id="studentButton"
+onclick="chooseRole('student')">
+
+Student
+
+</button>
+
+<button
+class="role"
+id="teacherButton"
+onclick="chooseRole('teacher')">
+
+Teacher
+
+</button>
+
+</div>
+
+<input
+type="email"
+id="email"
+placeholder="Enter your email">
+
+<input
+type="password"
+id="password"
+placeholder="Create or enter password">
+
+<button
+class="main"
+onclick="loginUser()">
+
+Login
+
+</button>
+
+<button
+class="create"
+onclick="createAccount()">
+
+Create Account
+
+</button>
+
+<p
+class="message"
+id="message">
+
+</p>
+
+<a
+class="back"
+href="index.html">
+
+← Back to Home
+
+</a>
+
+</div>
+
+<script type="module">
+
+import {
+initializeApp
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+
+getAuth,
+
+createUserWithEmailAndPassword,
+
+signInWithEmailAndPassword
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+import {
+
+getFirestore,
+
+doc,
+
+setDoc,
+
+getDoc
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
+
+authDomain:
+"mfz-learning.firebaseapp.com",
+
+projectId:
+"mfz-learning",
+
+storageBucket:
+"mfz-learning.firebasestorage.app",
+
+messagingSenderId:
+"793150284094",
+
+appId:
+"1:793150284094:web:17ebcdc2bab15141c28c6f"
+
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+const db =
+getFirestore(app);
+
+
+let selectedRole =
+"student";
+
+
+window.chooseRole =
+function(role){
+
+selectedRole = role;
+
+document
+.getElementById(
+"studentButton"
+)
+.classList
+.remove("active");
+
+document
+.getElementById(
+"teacherButton"
+)
+.classList
+.remove("active");
+
+if(
+role === "student"
+){
+
+document
+.getElementById(
+"studentButton"
+)
+.classList
+.add("active");
+
+document
+.getElementById(
+"heading"
+)
+.innerHTML =
+"Student Login";
+
+}
+
+else{
+
+document
+.getElementById(
+"teacherButton"
+)
+.classList
+.add("active");
+
+document
+.getElementById(
+"heading"
+)
+.innerHTML =
+"Teacher Login";
+
+}
+
+};
+
+
+window.createAccount =
+async function(){
+
+const email =
+document
+.getElementById(
+"email"
+)
+.value
+.trim();
+
+const password =
+document
+.getElementById(
+"password"
+)
+.value;
+
+const message =
+document
+.getElementById(
+"message"
+);
+
+if(
+email === "" ||
+password === ""
+){
+
+message.innerHTML =
+"Please enter email and password.";
+
+return;
+
+}
+
+try{
+
+const result =
+
+await
+createUserWithEmailAndPassword(
+
+auth,
+
+email,
+
+password
+
+);
+
+
+let status =
+"approved";
+
+if(
+selectedRole ===
+"teacher"
+){
+
+status =
+"pending";
+
+}
+
+
+await setDoc(
+
+doc(
+db,
+"users",
+result.user.uid
+),
+
+{
+
+email:
+email,
+
+role:
+selectedRole,
+
+status:
+status
+
+}
+
+);
+
+
+if(
+selectedRole ===
+"student"
+){
+
+window.location.href =
+"student.html";
+
+}
+
+else{
+
+window.location.href =
+"teacher.html";
+
+}
+
+}
+
+catch(error){
+
+message.innerHTML =
+error.message;
+
+}
+
+};
+
+
+window.loginUser =
+async function(){
+
+const email =
+document
+.getElementById(
+"email"
+)
+.value
+.trim();
+
+const password =
+document
+.getElementById(
+"password"
+)
+.value;
+
+const message =
+document
+.getElementById(
+"message"
+);
+
+try{
+
+const result =
+
+await
+signInWithEmailAndPassword(
+
+auth,
+
+email,
+
+password
+
+);
+
+
+const userData =
+
+await getDoc(
+
+doc(
+db,
+"users",
+result.user.uid
+)
+
+);
+
+
+if(
+!userData.exists()
+){
+
+message.innerHTML =
+"User profile not found.";
+
+return;
+
+}
+
+
+const data =
+userData.data();
+
+
+if(
+data.role ===
+"student"
+){
+
+window.location.href =
+"student.html";
+
+}
+
+else if(
+
+data.role ===
+"teacher"
+
+){
+
+window.location.href =
+"teacher.html";
+
+}
+
+else if(
+
+data.role ===
+"admin"
+
+){
+
+window.location.href =
+"admin.html";
+
+}
+
+}
+
+catch(error){
+
+message.innerHTML =
+"Wrong email or password.";
+
+}
+
+};
+
+</script>
+
+</body>
+
+</html>
