@@ -25,10 +25,12 @@ color:white;
 
 nav{
 background:#111827;
-padding:20px 8%;
+padding:18px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
+position:sticky;
+top:0;
 }
 
 .logo{
@@ -37,14 +39,18 @@ font-weight:bold;
 color:#00d4ff;
 }
 
-.admin{
+.logout{
 background:#ff9800;
-padding:10px 18px;
+color:white;
+border:none;
+padding:11px 18px;
 border-radius:8px;
+font-weight:bold;
+cursor:pointer;
 }
 
 .main{
-padding:50px 8%;
+padding:45px 8%;
 }
 
 .main h1{
@@ -52,37 +58,80 @@ font-size:40px;
 margin-bottom:10px;
 }
 
-.main p{
+.subtitle{
 color:#d4d4d4;
 margin-bottom:30px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:22px;
 }
 
 .card{
+background:#16213e;
+padding:28px;
+border-radius:18px;
+cursor:pointer;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-7px);
+background:#1d4ed8;
+}
+
+.card h2{
+color:#00d4ff;
+margin-bottom:12px;
+}
+
+.card p{
+color:#d4d4d4;
+line-height:24px;
+}
+
+.panel{
+display:none;
+margin-top:35px;
 background:#16213e;
 padding:30px;
 border-radius:18px;
 }
 
-.card h2{
+.panel h2{
 color:#00d4ff;
-margin-bottom:15px;
+margin-bottom:18px;
 }
 
-.card button{
+.close{
 background:#ff9800;
 color:white;
 border:none;
-padding:12px 18px;
+padding:10px 18px;
 border-radius:8px;
+font-weight:bold;
 cursor:pointer;
-margin-top:18px;
+margin-top:20px;
+}
+
+.item{
+background:#0b1220;
+padding:18px;
+border-radius:12px;
+margin-top:12px;
+}
+
+.action{
+background:#00c8ff;
+color:white;
+border:none;
+padding:9px 15px;
+border-radius:7px;
+font-weight:bold;
+cursor:pointer;
+margin-top:12px;
 }
 
 </style>
@@ -94,60 +143,52 @@ margin-top:18px;
 <nav>
 
 <div class="logo">
-MFZ
+MFZ Admin 👑
 </div>
 
-<div class="admin">
-👑 Admin Panel
-</div>
+<button class="logout" onclick="logout()">
+Logout
+</button>
 
 </nav>
 
 <section class="main">
 
 <h1>
-Welcome, Admin 👑
+Welcome, Kartik 👑
 </h1>
 
-<p>
-Manage your MFZ Learning website from here.
+<p class="subtitle">
+Manage MFZ Learning from your Admin Dashboard.
 </p>
 
 <div class="grid">
 
-<div class="card">
+<div class="card" onclick="openPanel('teachers')">
 
 <h2>
 👨‍🏫 Teacher Requests
 </h2>
 
 <p>
-Approve or reject teacher requests.
+View and manage teacher requests.
 </p>
-
-<button>
-View Requests
-</button>
 
 </div>
 
-<div class="card">
+<div class="card" onclick="openPanel('students')">
 
 <h2>
 👨‍🎓 Students
 </h2>
 
 <p>
-View registered students.
+View registered MFZ students.
 </p>
-
-<button>
-View Students
-</button>
 
 </div>
 
-<div class="card">
+<div class="card" onclick="openPanel('batches')">
 
 <h2>
 📚 Batches
@@ -157,31 +198,217 @@ View Students
 Manage Foundation, Class 6 and Class 7 batches.
 </p>
 
-<button>
-Manage Batches
-</button>
-
 </div>
 
-<div class="card">
+<div class="card" onclick="openPanel('classes')">
 
 <h2>
 📺 Classes
 </h2>
 
 <p>
-Add live and recorded classes.
+Manage live and recorded classes.
 </p>
 
-<button>
-Manage Classes
+</div>
+
+</div>
+
+
+<div class="panel" id="teachers">
+
+<h2>
+👨‍🏫 Teacher Requests
+</h2>
+
+<div class="item">
+
+No teacher requests yet.
+
+</div>
+
+<button class="close" onclick="closePanels()">
+
+Close
+
 </button>
 
 </div>
 
+
+<div class="panel" id="students">
+
+<h2>
+👨‍🎓 Registered Students
+</h2>
+
+<div class="item">
+
+Student list will appear here.
+
+</div>
+
+<button class="close" onclick="closePanels()">
+
+Close
+
+</button>
+
+</div>
+
+
+<div class="panel" id="batches">
+
+<h2>
+📚 Manage Batches
+</h2>
+
+<div class="item">
+
+🌟 Foundation Batch
+
+<br>
+
+<button class="action">
+
+Manage Foundation Batch
+
+</button>
+
+</div>
+
+<div class="item">
+
+📘 Class 6 Batch
+
+<br>
+
+<button class="action">
+
+Manage Class 6 Batch
+
+</button>
+
+</div>
+
+<div class="item">
+
+📗 Class 7 Batch
+
+<br>
+
+<button class="action">
+
+Manage Class 7 Batch
+
+</button>
+
+</div>
+
+<button class="close" onclick="closePanels()">
+
+Close
+
+</button>
+
+</div>
+
+
+<div class="panel" id="classes">
+
+<h2>
+📺 Manage Classes
+</h2>
+
+<div class="item">
+
+➕ Add Live Class
+
+<br>
+
+<button class="action">
+
+Add Class
+
+</button>
+
+</div>
+
+<div class="item">
+
+🎥 Add Recorded Class
+
+<br>
+
+<button class="action">
+
+Add Recording
+
+</button>
+
+</div>
+
+<button class="close" onclick="closePanels()">
+
+Close
+
+</button>
+
 </div>
 
 </section>
+
+
+<script>
+
+function closePanels(){
+
+const panels =
+
+document.querySelectorAll(".panel");
+
+panels.forEach(
+
+function(panel){
+
+panel.style.display = "none";
+
+}
+
+);
+
+}
+
+
+function openPanel(id){
+
+closePanels();
+
+document
+.getElementById(id)
+.style.display = "block";
+
+window.scrollTo({
+
+top:document
+.getElementById(id)
+.offsetTop - 80,
+
+behavior:"smooth"
+
+});
+
+}
+
+
+function logout(){
+
+window.location.href =
+"index.html";
+
+}
+
+</script>
 
 </body>
 
