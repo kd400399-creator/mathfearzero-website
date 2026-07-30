@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>
+MFZ Student Dashboard
+</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+}
+
+nav{
+background:#111827;
+padding:20px 8%;
+display:flex;
+justify-content:space-between;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.logout{
+background:#ff9800;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.main{
+padding:60px 8%;
+}
+
+.card{
+background:#16213e;
+padding:30px;
+border-radius:18px;
+margin-top:25px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+MFZ Student
+</div>
+
+<button
+class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</nav>
+
+<div class="main">
+
+<h1>
+Welcome to MFZ 🎉
+</h1>
+
+<div class="card">
+
+<h2>
+My Batches
+</h2>
+
+<p>
+Your purchased batches will appear here.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+Classes
+</h2>
+
+<p>
+Live and recorded classes will appear here.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>
+Notes & Tests
+</h2>
+
+<p>
+Notes and tests will appear here.
+</p>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import {
+initializeApp
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+import {
+getAuth,
+signOut
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+
+const firebaseConfig = {
+
+apiKey:
+"AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
+
+authDomain:
+"mfz-learning.firebaseapp.com",
+
+projectId:
+"mfz-learning",
+
+storageBucket:
+"mfz-learning.firebasestorage.app",
+
+messagingSenderId:
+"793150284094",
+
+appId:
+"1:793150284094:web:17ebcdc2bab15141c28c6f"
+
+};
+
+
+const app =
+initializeApp(firebaseConfig);
+
+const auth =
+getAuth(app);
+
+
+window.logout =
+async function(){
+
+await signOut(auth);
+
+window.location.href =
+"index.html";
+
+};
+
+</script>
+
+</body>
+
+</html>
