@@ -23,52 +23,102 @@ body{
 background:#0b1220;
 color:white;
 min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
 padding:20px;
 }
 
-.login-box{
-width:100%;
-max-width:420px;
-background:#16213e;
-padding:35px;
-border-radius:22px;
-box-shadow:0 15px 40px rgba(0,0,0,.35);
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 8%;
+background:#111827;
+border-radius:15px;
 }
 
-h1{
-text-align:center;
+.logo{
+font-size:28px;
+font-weight:bold;
 color:#00d4ff;
-margin-bottom:10px;
+}
+
+.back{
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:10px 18px;
+border-radius:8px;
+}
+
+.login-page{
+max-width:850px;
+margin:55px auto;
+text-align:center;
+}
+
+.login-page h1{
+color:#00d4ff;
+font-size:38px;
+margin-bottom:12px;
 }
 
 .subtitle{
-text-align:center;
 color:#cbd5e1;
-margin-bottom:25px;
+margin-bottom:35px;
+font-size:18px;
 }
 
-.tabs{
+.role-cards{
 display:flex;
-gap:10px;
-margin-bottom:20px;
+gap:25px;
+justify-content:center;
+flex-wrap:wrap;
 }
 
-.tabs button{
-width:50%;
-padding:12px;
-border:none;
-border-radius:8px;
-font-weight:bold;
+.role-card{
+width:350px;
+background:#16213e;
+padding:35px 25px;
+border-radius:22px;
 cursor:pointer;
-background:#0b1220;
-color:white;
+transition:.25s;
+border:2px solid transparent;
 }
 
-.tabs button.active{
-background:#ff9800;
+.role-card:hover{
+transform:translateY(-6px);
+border-color:#00d4ff;
+}
+
+.role-icon{
+font-size:55px;
+margin-bottom:15px;
+}
+
+.role-card h2{
+color:#00d4ff;
+margin-bottom:12px;
+}
+
+.role-card p{
+color:#cbd5e1;
+line-height:24px;
+}
+
+.login-box{
+display:none;
+width:100%;
+max-width:430px;
+margin:40px auto;
+background:#16213e;
+padding:35px;
+border-radius:22px;
+text-align:left;
+}
+
+.login-box h2{
+text-align:center;
+color:#00d4ff;
+margin-bottom:20px;
 }
 
 input{
@@ -97,18 +147,23 @@ cursor:pointer;
 background:#00c8ff;
 }
 
+.small-button{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:9px;
+background:#0b1220;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
 .message{
 margin-top:15px;
 text-align:center;
 line-height:22px;
-}
-
-.back{
-display:block;
-text-align:center;
-margin-top:20px;
-color:#00d4ff;
-text-decoration:none;
+color:white;
 }
 
 </style>
@@ -117,41 +172,77 @@ text-decoration:none;
 
 <body>
 
-<div class="login-box">
+<nav>
 
-<h1>MFZ Learning</h1>
+<div class="logo">
+MFZ Learning
+</div>
+
+<a class="back" href="index.html">
+← Back
+</a>
+
+</nav>
+
+<section class="login-page" id="rolePage">
+
+<h1>Welcome to MFZ Learning</h1>
 
 <p class="subtitle">
-Login or create your student account
+Choose your login type
 </p>
 
-<div class="tabs">
+<div class="role-cards">
 
-<button id="loginTab" class="active" onclick="showLogin()">
-Login
-</button>
+<div class="role-card" onclick="openLogin('student')">
 
-<button id="signupTab" onclick="showSignup()">
-Create Account
-</button>
+<div class="role-icon">
+🎓
+</div>
+
+<h2>Student Login</h2>
+
+<p>
+Login to access your courses, batches and learning dashboard.
+</p>
 
 </div>
 
-<div id="loginForm">
+<div class="role-card" onclick="openLogin('teacher')">
+
+<div class="role-icon">
+👨‍🏫
+</div>
+
+<h2>Teacher Login</h2>
+
+<p>
+Login to manage classes, students and your teacher dashboard.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<div class="login-box" id="loginBox">
+
+<h2 id="loginTitle">
+Login
+</h2>
 
 <input
 type="email"
-id="loginEmail"
+id="email"
 placeholder="Enter your email"
-required
 
 >
 
 <input
 type="password"
-id="loginPassword"
+id="password"
 placeholder="Enter your password"
-required
 
 >
 
@@ -161,41 +252,19 @@ Login
 
 </button>
 
-</div>
+<button class="small-button" onclick="createAccount()">
 
-<div id="signupForm" style="display:none;">
-
-<input
-type="email"
-id="signupEmail"
-placeholder="Enter your email"
-required
-
->
-
-<input
-type="password"
-id="signupPassword"
-placeholder="Create password (minimum 6 characters)"
-required
-
->
-
-<button class="main-button" onclick="signupUser()">
-
-Create Student Account
+Create New Account
 
 </button>
 
-</div>
+<button class="small-button" onclick="goBack()">
+
+← Choose Another Login
+
+</button>
 
 <p class="message" id="message"></p>
-
-<a class="back" href="index.html">
-
-← Back to Home
-
-</a>
 
 </div>
 
@@ -234,44 +303,46 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
+let selectedRole = "";
 
-window.showLogin = function(){
 
-document.getElementById("loginForm").style.display="block";
+window.openLogin = function(role){
 
-document.getElementById("signupForm").style.display="none";
+selectedRole = role;
 
-document.getElementById("loginTab").classList.add("active");
+document.getElementById("rolePage").style.display="none";
 
-document.getElementById("signupTab").classList.remove("active");
+document.getElementById("loginBox").style.display="block";
+
+document.getElementById("loginTitle").innerHTML=
+
+role === "student"
+
+? "🎓 Student Login"
+
+: "👨‍🏫 Teacher Login";
+
+};
+
+
+window.goBack = function(){
+
+document.getElementById("loginBox").style.display="none";
+
+document.getElementById("rolePage").style.display="block";
 
 document.getElementById("message").innerHTML="";
 
 };
 
 
-window.showSignup = function(){
-
-document.getElementById("loginForm").style.display="none";
-
-document.getElementById("signupForm").style.display="block";
-
-document.getElementById("signupTab").classList.add("active");
-
-document.getElementById("loginTab").classList.remove("active");
-
-document.getElementById("message").innerHTML="";
-
-};
-
-
-window.signupUser = async function(){
+window.createAccount = async function(){
 
 const email =
-document.getElementById("signupEmail").value.trim();
+document.getElementById("email").value.trim();
 
 const password =
-document.getElementById("signupPassword").value;
+document.getElementById("password").value;
 
 const message =
 document.getElementById("message");
@@ -279,7 +350,16 @@ document.getElementById("message");
 if(email === "" || password === ""){
 
 message.innerHTML=
-"Please enter email and password.";
+"⚠️ Please enter email and password.";
+
+return;
+
+}
+
+if(selectedRole === "teacher"){
+
+message.innerHTML=
+"⚠️ Teacher accounts are created only after admin approval.";
 
 return;
 
@@ -299,7 +379,7 @@ userCredential.user
 );
 
 message.innerHTML=
-"✅ Account created! A verification email has been sent. Please verify your email, then login.";
+"✅ Student account created! Check your email and verify it before logging in.";
 
 }catch(error){
 
@@ -314,10 +394,10 @@ message.innerHTML=
 window.loginUser = async function(){
 
 const email =
-document.getElementById("loginEmail").value.trim();
+document.getElementById("email").value.trim();
 
 const password =
-document.getElementById("loginPassword").value;
+document.getElementById("password").value;
 
 const message =
 document.getElementById("message");
@@ -325,7 +405,7 @@ document.getElementById("message");
 if(email === "" || password === ""){
 
 message.innerHTML=
-"Please enter email and password.";
+"⚠️ Please enter email and password.";
 
 return;
 
@@ -354,15 +434,29 @@ localStorage.setItem(
 userCredential.user.email
 );
 
+localStorage.setItem(
+"mfzRole",
+selectedRole
+);
+
 message.innerHTML=
 "✅ Login successful!";
 
 setTimeout(function(){
 
+if(selectedRole === "student"){
+
 window.location.href=
 "student.html";
 
-},800);
+}else{
+
+window.location.href=
+"teacher.html";
+
+}
+
+},700);
 
 }catch(error){
 
