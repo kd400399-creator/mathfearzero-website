@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MFZ Class 6 Payment</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+min-height:100vh;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 8%;
+background:#111827;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.back{
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:10px 18px;
+border-radius:8px;
+}
+
+.payment-box{
+max-width:600px;
+margin:55px auto;
+padding:35px;
+background:#16213e;
+border-radius:22px;
+text-align:center;
+}
+
+.payment-box h1{
+color:#00d4ff;
+font-size:34px;
+margin-bottom:15px;
+}
+
+.payment-box p{
+color:#d4d4d4;
+line-height:26px;
+margin:12px 0;
+}
+
+.price{
+font-size:32px;
+font-weight:bold;
+color:#ff9800;
+margin:22px 0;
+}
+
+.qr-box{
+background:white;
+display:inline-block;
+padding:15px;
+border-radius:15px;
+margin:20px 0;
+}
+
+.qr-box img{
+width:260px;
+max-width:100%;
+display:block;
+}
+
+.next{
+background:#ff9800;
+color:white;
+border:none;
+padding:15px 35px;
+border-radius:10px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+margin-top:15px;
+}
+
+.next:hover{
+background:#00c8ff;
+}
+
+.note{
+margin-top:20px;
+font-size:14px;
+color:#bfc7d5;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+MFZ
+</div>
+
+<a class="back" href="class6.html">
+← Back
+</a>
+
+</nav>
+
+<section class="payment-box">
+
+<h1>📘 Class 6 Batch Payment</h1>
+
+<p>
+MFZ Class 6 Maths + Science Batch
+</p>
+
+<div class="price">
+₹10 Only
+</div>
+
+<p>
+नीचे दिए गए QR Code को scan करके ₹10 का payment करें।
+</p>
+
+<div class="qr-box">
+
+<img src="papa-qr.png" alt="MFZ Payment QR">
+
+</div>
+
+<p>
+Payment पूरा होने के बाद नीचे <b>Next</b> दबाएँ।
+</p>
+
+<button class="next" onclick="goNext()">
+
+Next →
+
+</button>
+
+<p class="note">
+
+Payment screenshot अगले page पर upload करना होगा।
+Payment verify होने के बाद batch अधिकतम 24 घंटे के अंदर activate किया जाएगा।
+
+</p>
+
+</section>
+
+<script>
+
+function goNext(){
+
+window.location.href="class6-upload.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
