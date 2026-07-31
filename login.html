@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -23,94 +24,91 @@ background:#0b1220;
 color:white;
 min-height:100vh;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 padding:20px;
 }
 
-.box{
+.login-box{
 width:100%;
-max-width:430px;
+max-width:420px;
 background:#16213e;
 padding:35px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.4);
+border-radius:22px;
+box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
-.logo{
+h1{
 text-align:center;
-font-size:35px;
-font-weight:bold;
 color:#00d4ff;
 margin-bottom:10px;
 }
 
-h2{
+.subtitle{
 text-align:center;
-margin-bottom:20px;
+color:#cbd5e1;
+margin-bottom:25px;
 }
 
-.roles{
+.tabs{
 display:flex;
 gap:10px;
 margin-bottom:20px;
 }
 
-.role{
-flex:1;
+.tabs button{
+width:50%;
 padding:12px;
 border:none;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
+background:#0b1220;
+color:white;
 }
 
-.active{
+.tabs button.active{
 background:#ff9800;
-color:white;
 }
 
 input{
 width:100%;
 padding:14px;
-margin-bottom:15px;
+margin:9px 0;
 border:none;
-border-radius:8px;
+border-radius:9px;
 font-size:16px;
 }
 
-button{
+.main-button{
+width:100%;
 padding:14px;
+margin-top:12px;
 border:none;
-border-radius:8px;
+border-radius:9px;
+background:#ff9800;
+color:white;
+font-size:17px;
 font-weight:bold;
 cursor:pointer;
 }
 
-.main{
-width:100%;
-background:#ff9800;
-color:white;
-margin-bottom:10px;
-}
-
-.create{
-width:100%;
+.main-button:hover{
 background:#00c8ff;
-color:white;
 }
 
 .message{
-text-align:center;
 margin-top:15px;
-color:#00d4ff;
+text-align:center;
+line-height:22px;
 }
 
 .back{
 display:block;
 text-align:center;
 margin-top:20px;
-color:white;
+color:#00d4ff;
+text-decoration:none;
 }
 
 </style>
@@ -119,73 +117,81 @@ color:white;
 
 <body>
 
-<div class="box">
+<div class="login-box">
 
-<div class="logo">
-MFZ
-</div>
+<h1>MFZ Learning</h1>
 
-<h2 id="heading">
-Student Login
-</h2>
+<p class="subtitle">
+Login or create your student account
+</p>
 
-<div class="roles">
+<div class="tabs">
 
-<button
-class="role active"
-id="studentButton"
-onclick="chooseRole('student')">
-
-Student
-
+<button id="loginTab" class="active" onclick="showLogin()">
+Login
 </button>
 
-<button
-class="role"
-id="teacherButton"
-onclick="chooseRole('teacher')">
-
-Teacher
-
+<button id="signupTab" onclick="showSignup()">
+Create Account
 </button>
 
 </div>
+
+<div id="loginForm">
 
 <input
 type="email"
-id="email"
-placeholder="Enter your email">
+id="loginEmail"
+placeholder="Enter your email"
+required
+
+>
 
 <input
 type="password"
-id="password"
-placeholder="Create or enter password">
+id="loginPassword"
+placeholder="Enter your password"
+required
 
-<button
-class="main"
-onclick="loginUser()">
+>
+
+<button class="main-button" onclick="loginUser()">
 
 Login
 
 </button>
 
-<button
-class="create"
-onclick="createAccount()">
+</div>
 
-Create Account
+<div id="signupForm" style="display:none;">
+
+<input
+type="email"
+id="signupEmail"
+placeholder="Enter your email"
+required
+
+>
+
+<input
+type="password"
+id="signupPassword"
+placeholder="Create password (minimum 6 characters)"
+required
+
+>
+
+<button class="main-button" onclick="signupUser()">
+
+Create Student Account
 
 </button>
 
-<p
-class="message"
-id="message">
+</div>
 
-</p>
+<p class="message" id="message"></p>
 
-<a
-class="back"
-href="index.html">
+<a class="back" href="index.html">
 
 ← Back to Home
 
@@ -195,172 +201,84 @@ href="index.html">
 
 <script type="module">
 
-import {
-initializeApp
-}
-
-from
-
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
 
 import {
-
 getAuth,
-
 createUserWithEmailAndPassword,
-
-signInWithEmailAndPassword
-
+signInWithEmailAndPassword,
+sendEmailVerification
 }
-
-from
-
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-import {
-
-getFirestore,
-
-doc,
-
-setDoc,
-
-getDoc
-
-}
-
-from
-
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
+apiKey: "AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
 
-authDomain:
-"mfz-learning.firebaseapp.com",
+authDomain: "mfz-learning.firebaseapp.com",
 
-projectId:
-"mfz-learning",
+projectId: "mfz-learning",
 
-storageBucket:
-"mfz-learning.firebasestorage.app",
+storageBucket: "mfz-learning.firebasestorage.app",
 
-messagingSenderId:
-"793150284094",
+messagingSenderId: "793150284094",
 
-appId:
-"1:793150284094:web:17ebcdc2bab15141c28c6f"
+appId: "1:793150284094:web:17ebcdc2bab15141c28c6f"
 
 };
 
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
-
-const db =
-getFirestore(app);
+const auth = getAuth(app);
 
 
-let selectedRole =
-"student";
+window.showLogin = function(){
 
+document.getElementById("loginForm").style.display="block";
 
-window.chooseRole =
-function(role){
+document.getElementById("signupForm").style.display="none";
 
-selectedRole = role;
+document.getElementById("loginTab").classList.add("active");
 
-document
-.getElementById(
-"studentButton"
-)
-.classList
-.remove("active");
+document.getElementById("signupTab").classList.remove("active");
 
-document
-.getElementById(
-"teacherButton"
-)
-.classList
-.remove("active");
-
-if(
-role === "student"
-){
-
-document
-.getElementById(
-"studentButton"
-)
-.classList
-.add("active");
-
-document
-.getElementById(
-"heading"
-)
-.innerHTML =
-"Student Login";
-
-}
-
-else{
-
-document
-.getElementById(
-"teacherButton"
-)
-.classList
-.add("active");
-
-document
-.getElementById(
-"heading"
-)
-.innerHTML =
-"Teacher Login";
-
-}
+document.getElementById("message").innerHTML="";
 
 };
 
 
-window.createAccount =
-async function(){
+window.showSignup = function(){
+
+document.getElementById("loginForm").style.display="none";
+
+document.getElementById("signupForm").style.display="block";
+
+document.getElementById("signupTab").classList.add("active");
+
+document.getElementById("loginTab").classList.remove("active");
+
+document.getElementById("message").innerHTML="";
+
+};
+
+
+window.signupUser = async function(){
 
 const email =
-document
-.getElementById(
-"email"
-)
-.value
-.trim();
+document.getElementById("signupEmail").value.trim();
 
 const password =
-document
-.getElementById(
-"password"
-)
-.value;
+document.getElementById("signupPassword").value;
 
 const message =
-document
-.getElementById(
-"message"
-);
+document.getElementById("message");
 
-if(
-email === "" ||
-password === ""
-){
+if(email === "" || password === ""){
 
-message.innerHTML =
+message.innerHTML=
 "Please enter email and password.";
 
 return;
@@ -369,196 +287,87 @@ return;
 
 try{
 
-const result =
-
-await
-createUserWithEmailAndPassword(
-
+const userCredential =
+await createUserWithEmailAndPassword(
 auth,
-
 email,
-
 password
-
 );
 
-
-let status =
-"approved";
-
-if(
-selectedRole ===
-"teacher"
-){
-
-status =
-"pending";
-
-}
-
-
-await setDoc(
-
-doc(
-db,
-"users",
-result.user.uid
-),
-
-{
-
-email:
-email,
-
-role:
-selectedRole,
-
-status:
-status
-
-}
-
+await sendEmailVerification(
+userCredential.user
 );
 
+message.innerHTML=
+"✅ Account created! A verification email has been sent. Please verify your email, then login.";
 
-if(
-selectedRole ===
-"student"
-){
+}catch(error){
 
-window.location.href =
-"student.html";
-
-}
-
-else{
-
-window.location.href =
-"teacher.html";
-
-}
-
-}
-
-catch(error){
-
-message.innerHTML =
-error.message;
+message.innerHTML=
+"❌ " + error.message;
 
 }
 
 };
 
 
-window.loginUser =
-async function(){
+window.loginUser = async function(){
 
 const email =
-document
-.getElementById(
-"email"
-)
-.value
-.trim();
+document.getElementById("loginEmail").value.trim();
 
 const password =
-document
-.getElementById(
-"password"
-)
-.value;
+document.getElementById("loginPassword").value;
 
 const message =
-document
-.getElementById(
-"message"
-);
+document.getElementById("message");
 
-try{
+if(email === "" || password === ""){
 
-const result =
-
-await
-signInWithEmailAndPassword(
-
-auth,
-
-email,
-
-password
-
-);
-
-
-const userData =
-
-await getDoc(
-
-doc(
-db,
-"users",
-result.user.uid
-)
-
-);
-
-
-if(
-!userData.exists()
-){
-
-message.innerHTML =
-"User profile not found.";
+message.innerHTML=
+"Please enter email and password.";
 
 return;
 
 }
 
+try{
 
-const data =
-userData.data();
+const userCredential =
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
 
+if(!userCredential.user.emailVerified){
 
-if(
-data.role ===
-"student"
-){
+message.innerHTML=
+"⚠️ Please verify your email first.";
 
-window.location.href =
+return;
+
+}
+
+localStorage.setItem(
+"mfzUser",
+userCredential.user.email
+);
+
+message.innerHTML=
+"✅ Login successful!";
+
+setTimeout(function(){
+
+window.location.href=
 "student.html";
 
-}
+},800);
 
-else if(
+}catch(error){
 
-data.role ===
-"teacher"
-
-){
-
-window.location.href =
-"teacher.html";
-
-}
-
-else if(
-
-data.role ===
-"admin"
-
-){
-
-window.location.href =
-"admin.html";
-
-}
-
-}
-
-catch(error){
-
-message.innerHTML =
-"Wrong email or password.";
+message.innerHTML=
+"❌ Email or password is incorrect.";
 
 }
 
