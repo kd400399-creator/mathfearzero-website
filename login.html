@@ -359,11 +359,16 @@ return;
 if(selectedRole === "teacher"){
 
 message.innerHTML=
-"⚠️ Teacher accounts are created only after admin approval.";
+"✅ आपकी Teacher Account Request Admin को भेज दी गई है।<br><br>Admin approval के बाद आप Teacher Dashboard में login कर पाएँगे।";
+
+document.getElementById("email").value="";
+
+document.getElementById("password").value="";
 
 return;
 
 }
+
 
 try{
 
