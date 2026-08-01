@@ -423,7 +423,30 @@ user.role==="student"
 
 );
 
+const paymentRequests=
 
+JSON.parse(
+
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+
+) || [];
+
+
+const pendingRequest=
+
+paymentRequests.find(
+
+request=>
+
+request.username===
+currentUser.username &&
+
+request.status===
+"pending"
+
+);
 const approvedBatches=
 
 latestUser &&
@@ -448,7 +471,73 @@ approvedBatches.length===0
 
 ){
 
+if(pendingRequest){
+
 batchArea.innerHTML=
+
+`
+
+<div class="empty-box">
+
+<h3>
+
+⏳ Batch Request Pending
+
+</h3>
+
+<p>
+
+Your payment proof has been submitted.
+
+</p>
+
+<p>
+
+Your Class 6 Batch request will
+be reviewed within 24 hours.
+
+</p>
+
+</div>
+
+`;
+
+}else{
+
+batchArea.innerHTML=
+
+`
+
+<div class="empty-box">
+
+<h3>
+
+No Active Batch Yet
+
+</h3>
+
+<p>
+
+You have not purchased or received
+approval for any batch yet.
+
+</p>
+
+<a
+class="explore"
+href="classes.html">
+
+Explore Courses
+
+</a>
+
+</div>
+
+`;
+
+}
+
+}else{
 
 `
 
