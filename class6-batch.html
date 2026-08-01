@@ -54,7 +54,7 @@ background:#00c8ff;
 
 .container{
 width:90%;
-max-width:1100px;
+max-width:1000px;
 margin:40px auto;
 }
 
@@ -91,7 +91,7 @@ display:grid;
 grid-template-columns:
 repeat(
 auto-fit,
-minmax(240px,1fr)
+minmax(280px,1fr)
 );
 
 gap:20px;
@@ -99,7 +99,7 @@ gap:20px;
 
 .subject-card{
 background:#16213e;
-padding:25px;
+padding:28px;
 border-radius:18px;
 border:1px solid #263248;
 }
@@ -117,7 +117,7 @@ line-height:23px;
 .open-subject{
 width:100%;
 margin-top:20px;
-padding:13px;
+padding:14px;
 border:none;
 border-radius:9px;
 background:#ff9800;
@@ -201,9 +201,9 @@ href="student.html">
 
 <p>
 
-Welcome to your Class 6 learning batch.
-Choose a subject to view chapters,
-lectures and study material.
+Welcome to the MFZ Class 6 Batch.
+Choose Mathematics or Science
+to start learning.
 
 </p>
 
@@ -212,7 +212,7 @@ lectures and study material.
 
 <h2 class="section-title">
 
-📚 Select a Subject
+📚 Available Subjects
 
 </h2>
 
@@ -230,15 +230,15 @@ lectures and study material.
 
 <p>
 
-Chapters, lectures,
-practice questions and
-revision classes.
+Chapter-wise lectures,
+practice questions,
+revision and study material.
 
 </p>
 
 <button
 class="open-subject"
-onclick="openSubject('Mathematics')">
+onclick="openMaths()">
 
 Open Mathematics
 
@@ -257,125 +257,17 @@ Open Mathematics
 
 <p>
 
-Science chapters,
-concept videos and
-important questions.
+Chapter explanations,
+concept videos,
+questions and revision.
 
 </p>
 
 <button
 class="open-subject"
-onclick="openSubject('Science')">
+onclick="openScience()">
 
 Open Science
-
-</button>
-
-</div>
-
-
-<div class="subject-card">
-
-<h2>
-
-🌍 Social Science
-
-</h2>
-
-<p>
-
-History, Geography,
-Civics and revision
-lectures.
-
-</p>
-
-<button
-class="open-subject"
-onclick="openSubject('Social Science')">
-
-Open Social Science
-
-</button>
-
-</div>
-
-
-<div class="subject-card">
-
-<h2>
-
-📖 English
-
-</h2>
-
-<p>
-
-Grammar, literature,
-chapter explanations
-and practice.
-
-</p>
-
-<button
-class="open-subject"
-onclick="openSubject('English')">
-
-Open English
-
-</button>
-
-</div>
-
-
-<div class="subject-card">
-
-<h2>
-
-📝 Hindi
-
-</h2>
-
-<p>
-
-Hindi chapters,
-grammar and
-important questions.
-
-</p>
-
-<button
-class="open-subject"
-onclick="openSubject('Hindi')">
-
-Open Hindi
-
-</button>
-
-</div>
-
-
-<div class="subject-card">
-
-<h2>
-
-🕉️ Sanskrit
-
-</h2>
-
-<p>
-
-Sanskrit lessons,
-grammar and
-practice material.
-
-</p>
-
-<button
-class="open-subject"
-onclick="openSubject('Sanskrit')">
-
-Open Sanskrit
 
 </button>
 
@@ -389,15 +281,16 @@ Open Sanskrit
 
 <strong>
 
-📢 Batch Notice
+📢 MFZ Batch Update
 
 </strong>
 
 <br><br>
 
-Live classes, recorded lectures,
-chapter-wise videos and study
-material will appear here.
+Currently, Mathematics and Science
+are available in this batch.
+More subjects will be added
+when new teachers join MFZ Learning.
 
 </div>
 
@@ -440,107 +333,21 @@ currentUser.role !==
 window.location.href =
 "login.html";
 
-}else{
-
-const users =
-
-JSON.parse(
-
-localStorage.getItem(
-"mfzUsers"
-)
-
-) || [];
-
-
-const latestUser =
-
-users.find(
-
-user =>
-
-user.username ===
-currentUser.username &&
-
-user.role ===
-"student"
-
-);
-
-
-const approvedBatches =
-
-latestUser &&
-
-Array.isArray(
-latestUser.approvedBatches
-)
-
-?
-
-latestUser.approvedBatches
-
-:
-
-[];
-
-
-if(
-
-!approvedBatches.includes(
-"Class 6 Batch"
-)
-
-){
-
-alert(
-
-"🔒 You do not have access to the Class 6 Batch yet."
-
-);
-
-window.location.href =
-"student.html";
-
-}
-
 }
 
 
-function openSubject(subject){
-
-localStorage.setItem(
-
-"mfzSelectedSubject",
-
-subject
-
-);
-
-
-if(
-
-subject ===
-"Mathematics"
-
-){
+function openMaths(){
 
 window.location.href =
 "class6-maths.html";
 
-}else{
-
-alert(
-
-"🚧 " +
-
-subject +
-
-" is coming soon."
-
-);
-
 }
+
+
+function openScience(){
+
+window.location.href =
+"class6-science.html";
 
 }
 
