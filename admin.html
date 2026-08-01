@@ -757,25 +757,191 @@ alert(
 
 function approvePayment(index){
 
-alert(
+const request=
 
-"Payment approval system will be connected in the next step."
+pendingPayments[index];
+
+
+const allRequests=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+
+) || [];
+
+
+const requestIndex=
+
+allRequests.findIndex(
+
+item=>
+
+item.id===
+request.id
 
 );
+
+
+if(requestIndex!==-1){
+
+allRequests[requestIndex].status=
+
+"approved";
+
+
+localStorage.setItem(
+
+"mfzPaymentRequests",
+
+JSON.stringify(allRequests)
+
+);
+
+}
+
+
+const users=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzUsers"
+)
+
+) || [];
+
+
+const userIndex=
+
+users.findIndex(
+
+user=>
+
+user.username===
+request.username &&
+
+user.role===
+"student"
+
+);
+
+
+if(userIndex!==-1){
+
+if(
+
+!users[userIndex].approvedBatches
+
+){
+
+users[userIndex].approvedBatches=[];
+
+}
+
+
+if(
+
+!users[userIndex].approvedBatches.includes(
+
+request.batch
+
+)
+
+){
+
+users[userIndex].approvedBatches.push(
+
+request.batch
+
+);
+
+}
+
+
+localStorage.setItem(
+
+"mfzUsers",
+
+JSON.stringify(users)
+
+);
+
+}
+
+
+alert(
+
+"✅ Payment approved! Batch access has been activated."
+
+);
+
+
+location.reload();
 
 }
 
 
 function rejectPayment(index){
 
-alert(
+const request=
 
-"Payment rejection system will be connected in the next step."
+pendingPayments[index];
+
+
+const allRequests=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+
+) || [];
+
+
+const requestIndex=
+
+allRequests.findIndex(
+
+item=>
+
+item.id===
+request.id
+
+);
+
+
+if(requestIndex!==-1){
+
+allRequests[requestIndex].status=
+
+"rejected";
+
+
+localStorage.setItem(
+
+"mfzPaymentRequests",
+
+JSON.stringify(allRequests)
 
 );
 
 }
 
+
+alert(
+
+"Payment request rejected."
+
+);
+
+
+location.reload();
+
+}
 
 function logoutAdmin(){
 
