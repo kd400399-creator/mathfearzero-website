@@ -737,20 +737,82 @@ location.reload();
 
 function viewProof(proof){
 
-if(proof){
+if(!proof){
+
+alert(
+"❌ Payment proof was not found."
+);
+
+return;
+
+}
+
+const proofWindow=
 
 window.open(
-proof,
+"",
 "_blank"
 );
 
-}else{
+proofWindow.document.write(
 
-alert(
-"Payment proof is not available."
+`
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>MFZ Payment Proof</title>
+
+<style>
+
+body{
+margin:0;
+padding:25px;
+background:#0b1220;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+h1{
+color:#00d4ff;
+}
+
+img{
+display:block;
+max-width:95%;
+max-height:80vh;
+margin:25px auto;
+border-radius:12px;
+border:2px solid #00d4ff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+
+MFZ Payment Proof
+
+</h1>
+
+<img
+src="${proof}"
+alt="Uploaded Payment Proof">
+
+</body>
+
+</html>
+`
+
 );
 
-}
+proofWindow.document.close();
 
 }
 
