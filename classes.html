@@ -50,6 +50,10 @@ border-radius:8px;
 font-weight:bold;
 }
 
+.back:hover{
+background:#00c8ff;
+}
+
 .container{
 width:90%;
 max-width:1100px;
@@ -69,6 +73,7 @@ margin-bottom:12px;
 
 .heading p{
 color:#cbd5e1;
+line-height:24px;
 }
 
 .course-grid{
@@ -105,31 +110,20 @@ margin:18px 0;
 
 .buy{
 display:block;
+width:100%;
+border:none;
 text-align:center;
 background:#ff9800;
 color:white;
-text-decoration:none;
 padding:14px;
 border-radius:9px;
+font-size:16px;
 font-weight:bold;
+cursor:pointer;
 }
 
 .buy:hover{
 background:#00c8ff;
-}
-
-.coming{
-opacity:.65;
-}
-
-.coming-button{
-display:block;
-text-align:center;
-background:#334155;
-color:#cbd5e1;
-padding:14px;
-border-radius:9px;
-font-weight:bold;
 }
 
 @media(max-width:600px){
@@ -185,7 +179,7 @@ href="student.html">
 
 <p>
 
-Choose a batch and start learning
+Choose your batch and start learning
 with MFZ Learning.
 
 </p>
@@ -200,21 +194,21 @@ with MFZ Learning.
 
 <h2>
 
-Class 6 Complete Batch
+📘 Class 6 Batch
 
 </h2>
 
 <p>
 
-Complete learning support for
-Class 6 students.
+Mathematics and Science
+learning support.
 
 </p>
 
 <p>
 
-Maths, practice, lectures
-and study material.
+Lectures, practice questions,
+revision and study material.
 
 </p>
 
@@ -224,67 +218,91 @@ and study material.
 
 </div>
 
-<a
+<button
 class="buy"
-href="class6-payment.html">
+onclick="buyBatch('Class 6 Batch')">
 
 Buy Class 6 Batch
 
-</a>
+</button>
 
 </div>
 
 
-<div class="course-card coming">
+<div class="course-card">
 
 <h2>
 
-Class 7 Complete Batch
+📗 Class 7 Batch
 
 </h2>
 
 <p>
 
-Class 7 batch will be available
-soon.
+Mathematics and Science
+learning support.
+
+</p>
+
+<p>
+
+Lectures, practice questions,
+revision and study material.
 
 </p>
 
 <div class="price">
 
-Coming Soon
+₹10
 
 </div>
 
-<div class="coming-button">
+<button
+class="buy"
+onclick="buyBatch('Class 7 Batch')">
 
-Available Soon
+Buy Class 7 Batch
+
+</button>
 
 </div>
 
-</div>
 
-
-<div class="course-card coming">
+<div class="course-card">
 
 <h2>
 
-More Courses
+🚀 Foundation Batch
 
 </h2>
 
 <p>
 
-More MFZ courses will be
-added soon.
+Foundation-level Mathematics
+and Science learning.
 
 </p>
 
-<div class="coming-button">
+<p>
 
-Coming Soon
+Concept building, practice
+and revision classes.
+
+</p>
+
+<div class="price">
+
+₹10
 
 </div>
+
+<button
+class="buy"
+onclick="buyBatch('Foundation Batch')">
+
+Buy Foundation Batch
+
+</button>
 
 </div>
 
@@ -292,6 +310,27 @@ Coming Soon
 </div>
 
 </main>
+
+
+<script>
+
+function buyBatch(batch){
+
+localStorage.setItem(
+
+"mfzSelectedBatch",
+
+batch
+
+);
+
+window.location.href =
+
+"payment-proof.html";
+
+}
+
+</script>
 
 </body>
 
