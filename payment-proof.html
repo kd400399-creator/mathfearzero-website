@@ -64,6 +64,7 @@ object-fit:contain;
 margin:18px 0;
 border-radius:12px;
 border:2px solid #00d4ff;
+background:#0b1220;
 }
 
 button{
@@ -78,8 +79,13 @@ font-weight:bold;
 cursor:pointer;
 }
 
+button:hover{
+background:#00c8ff;
+}
+
 button:disabled{
 opacity:0.6;
+cursor:not-allowed;
 }
 
 #message{
@@ -108,7 +114,6 @@ text-decoration:none;
 <p>
 
 Select your payment screenshot.
-The image will be optimized automatically.
 
 </p>
 
@@ -119,9 +124,11 @@ accept="image/*">
 
 <img
 id="imagePreview"
-class="preview">
+class="preview"
+alt="Payment proof preview">
 
 <button
+type="button"
 id="submitButton">
 
 Submit Payment Proof
@@ -171,6 +178,8 @@ document.getElementById(
 );
 
 
+/* SHOW IMAGE PREVIEW */
+
 fileInput.addEventListener(
 
 "change",
@@ -188,6 +197,10 @@ if(
 
 ){
 
+imagePreview.style.display =
+
+"none";
+
 return;
 
 }
@@ -196,7 +209,9 @@ return;
 imagePreview.src =
 
 URL.createObjectURL(
+
 file
+
 );
 
 
@@ -213,6 +228,8 @@ message.innerHTML =
 
 );
 
+
+/* SUBMIT PAYMENT */
 
 submitButton.addEventListener(
 
@@ -252,13 +269,15 @@ submitButton.innerText =
 
 message.innerHTML =
 
-"⏳ Saving payment request...";
+"⏳ Submitting payment request...";
 
 
 const currentUserText =
 
 localStorage.getItem(
+
 "mfzCurrentUser"
+
 );
 
 
@@ -278,7 +297,9 @@ try{
 const currentUser =
 
 JSON.parse(
+
 currentUserText
+
 );
 
 
@@ -290,21 +311,33 @@ currentUser.username ||
 
 }
 
-catch(error){
+catch(
+
+error
+
+){
+
+console.log(
+
+error
+
+);
 
 }
 
 }
 
 
-/* OLD REQUESTS REMOVE */
+/* REMOVE OLD TEST REQUESTS */
 
 localStorage.removeItem(
+
 "mfzPaymentRequests"
+
 );
 
 
-/* ONLY SMALL DATA SAVE */
+/* SAVE ONLY SMALL REQUEST DATA */
 
 const paymentRequest =
 
@@ -321,7 +354,9 @@ username,
 batch:
 
 localStorage.getItem(
+
 "mfzSelectedBatch"
+
 )
 
 ||
@@ -335,6 +370,7 @@ status:
 submittedAt:
 
 new Date()
+
 .toLocaleString()
 
 };
@@ -360,10 +396,16 @@ paymentRequest
 
 }
 
-catch(error){
+catch(
+
+error
+
+){
 
 console.log(
+
 error
+
 );
 
 }
@@ -373,7 +415,7 @@ error
 
 message.innerHTML =
 
-"✅ Payment proof submitted successfully!";
+"✅ Payment request submitted successfully!";
 
 
 submitButton.innerText =
@@ -391,7 +433,7 @@ window.location.href =
 
 },
 
-1200
+1500
 
 );
 
