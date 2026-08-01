@@ -440,6 +440,70 @@ currentUser.role !==
 window.location.href =
 "login.html";
 
+}else{
+
+const users =
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzUsers"
+)
+
+) || [];
+
+
+const latestUser =
+
+users.find(
+
+user =>
+
+user.username ===
+currentUser.username &&
+
+user.role ===
+"student"
+
+);
+
+
+const approvedBatches =
+
+latestUser &&
+
+Array.isArray(
+latestUser.approvedBatches
+)
+
+?
+
+latestUser.approvedBatches
+
+:
+
+[];
+
+
+if(
+
+!approvedBatches.includes(
+"Class 6 Batch"
+)
+
+){
+
+alert(
+
+"🔒 You do not have access to the Class 6 Batch yet."
+
+);
+
+window.location.href =
+"student.html";
+
+}
+
 }
 
 
@@ -454,13 +518,29 @@ subject
 );
 
 
+if(
+
+subject ===
+"Mathematics"
+
+){
+
+window.location.href =
+"class6-maths.html";
+
+}else{
+
 alert(
+
+"🚧 " +
 
 subject +
 
-" section will open next."
+" is coming soon."
 
 );
+
+}
 
 }
 
