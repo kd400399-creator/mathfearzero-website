@@ -125,13 +125,6 @@ border-radius:18px;
 margin-bottom:15px;
 }
 
-.request-top{
-display:flex;
-justify-content:space-between;
-gap:15px;
-flex-wrap:wrap;
-}
-
 .request-box h3{
 color:#00d4ff;
 margin-bottom:10px;
@@ -223,9 +216,7 @@ MFZ Admin
 
 <div class="admin-area">
 
-<span
-class="admin-name"
-id="adminName">
+<span class="admin-name">
 
 Admin
 
@@ -332,10 +323,7 @@ id="studentCount">
 
 </h2>
 
-<div
-id="teacherRequests">
-
-</div>
+<div id="teacherRequests"></div>
 
 
 <h2 class="section-title">
@@ -344,17 +332,14 @@ id="teacherRequests">
 
 </h2>
 
-<div
-id="paymentRequests">
-
-</div>
+<div id="paymentRequests"></div>
 
 </main>
 
 
 <script>
 
-const users=
+let users =
 
 JSON.parse(
 
@@ -365,58 +350,78 @@ localStorage.getItem(
 ) || [];
 
 
-const teacherArea=
+const teacherArea =
 
 document.getElementById(
 "teacherRequests"
 );
 
 
-const pendingTeachers=
+const paymentArea =
+
+document.getElementById(
+"paymentRequests"
+);
+
+
+function loadDashboard(){
+
+users =
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzUsers"
+)
+
+) || [];
+
+
+const pendingTeachers =
 
 users.filter(
 
-user=>
+user =>
 
-user.role==="teacher" &&
+user.role === "teacher" &&
 
-user.approved===false
+user.approved === false
+
+);
+
+
+const students =
+
+users.filter(
+
+user =>
+
+user.role === "student"
 
 );
 
 
 document.getElementById(
 "teacherCount"
-).innerText=
+).innerText =
 
 pendingTeachers.length;
 
 
-const students=
-
-users.filter(
-
-user=>
-
-user.role==="student"
-
-);
-
-
 document.getElementById(
 "studentCount"
-).innerText=
+).innerText =
 
 students.length;
 
 
 if(
 
-pendingTeachers.length===0
+pendingTeachers.length === 0
 
 ){
 
-teacherArea.innerHTML=
+teacherArea.innerHTML =
 
 `
 
@@ -430,22 +435,35 @@ No pending teacher requests.
 
 }else{
 
-let teacherHTML="";
+teacherArea.innerHTML =
+
+"";
 
 
 pendingTeachers.forEach(
 
-function(teacher,index){
+function(teacher){
 
-teacherHTML+=
+const userIndex =
+
+users.findIndex(
+
+user =>
+
+user.username ===
+teacher.username &&
+
+user.role ===
+"teacher"
+
+);
+
+
+teacherArea.innerHTML +=
 
 `
 
 <div class="request-box">
-
-<div class="request-top">
-
-<div>
 
 <h3>
 
@@ -465,15 +483,11 @@ Pending
 
 </span>
 
-</div>
-
-</div>
-
 <div class="buttons">
 
 <button
 class="approve"
-onclick="approveTeacher(${index})">
+onclick="approveTeacher(${userIndex})">
 
 ✓ Approve
 
@@ -481,7 +495,7 @@ onclick="approveTeacher(${index})">
 
 <button
 class="reject"
-onclick="rejectTeacher(${index})">
+onclick="rejectTeacher(${userIndex})">
 
 ✕ Reject
 
@@ -497,15 +511,10 @@ onclick="rejectTeacher(${index})">
 
 );
 
-
-teacherArea.innerHTML=
-
-teacherHTML;
-
 }
 
 
-const paymentRequests=
+const paymentRequests =
 
 JSON.parse(
 
@@ -516,38 +525,31 @@ localStorage.getItem(
 ) || [];
 
 
-const pendingPayments=
+const pendingPayments =
 
 paymentRequests.filter(
 
-request=>
+request =>
 
-request.status==="pending"
+request.status === "pending"
 
 );
 
 
 document.getElementById(
 "paymentCount"
-).innerText=
+).innerText =
 
 pendingPayments.length;
 
 
-const paymentArea=
-
-document.getElementById(
-"paymentRequests"
-);
-
-
 if(
 
-pendingPayments.length===0
+pendingPayments.length === 0
 
 ){
 
-paymentArea.innerHTML=
+paymentArea.innerHTML =
 
 `
 
@@ -561,14 +563,16 @@ No pending payment requests.
 
 }else{
 
-let paymentHTML="";
+paymentArea.innerHTML =
+
+"";
 
 
 pendingPayments.forEach(
 
-function(request,index){
+function(request){
 
-paymentHTML+=
+paymentArea.innerHTML +=
 
 `
 
@@ -603,7 +607,7 @@ Pending
 
 <button
 class="view"
-onclick="viewProof('${request.proof}')">
+onclick="viewProof(${request.id})">
 
 View Proof
 
@@ -611,7 +615,7 @@ View Proof
 
 <button
 class="approve"
-onclick="approvePayment(${index})">
+onclick="approvePayment(${request.id})">
 
 ✓ Approve
 
@@ -619,7 +623,7 @@ onclick="approvePayment(${index})">
 
 <button
 class="reject"
-onclick="rejectPayment(${index})">
+onclick="rejectPayment(${request.id})">
 
 ✕ Reject
 
@@ -635,38 +639,21 @@ onclick="rejectPayment(${index})">
 
 );
 
-
-paymentArea.innerHTML=
-
-paymentHTML;
+}
 
 }
 
 
-function approveTeacher(index){
+function approveTeacher(
 
-const teacher=
+userIndex
 
-pendingTeachers[index];
+){
 
+users[userIndex].approved =
 
-const userIndex=
+true;
 
-users.findIndex(
-
-user=>
-
-user.username===
-teacher.username &&
-
-user.role==="teacher"
-
-);
-
-
-if(userIndex!==-1){
-
-users[userIndex].approved=true;
 
 localStorage.setItem(
 
@@ -676,40 +663,30 @@ JSON.stringify(users)
 
 );
 
+
 alert(
 
-"Teacher approved successfully."
+"✅ Teacher approved successfully."
 
 );
 
-location.reload();
+
+loadDashboard();
 
 }
 
-}
 
+function rejectTeacher(
 
-function rejectTeacher(index){
+userIndex
 
-const teacher=
+){
 
-pendingTeachers[index];
+users.splice(
 
+userIndex,
 
-const newUsers=
-
-users.filter(
-
-user=>
-
-!(
-
-user.username===
-teacher.username &&
-
-user.role==="teacher"
-
-)
+1
 
 );
 
@@ -718,7 +695,7 @@ localStorage.setItem(
 
 "mfzUsers",
 
-JSON.stringify(newUsers)
+JSON.stringify(users)
 
 );
 
@@ -730,33 +707,70 @@ alert(
 );
 
 
-location.reload();
+loadDashboard();
 
 }
 
 
-function viewProof(proof){
+function viewProof(
 
-if(!proof){
+requestId
+
+){
+
+const requests =
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+
+) || [];
+
+
+const request =
+
+requests.find(
+
+item =>
+
+item.id === requestId
+
+);
+
+
+if(
+
+!request ||
+
+!request.proof
+
+){
 
 alert(
+
 "❌ Payment proof was not found."
+
 );
 
 return;
 
 }
 
-const proofWindow=
+
+const proofWindow =
 
 window.open(
 "",
 "_blank"
 );
 
+
 proofWindow.document.write(
 
 `
+
 <!DOCTYPE html>
 
 <html>
@@ -802,29 +816,30 @@ MFZ Payment Proof
 </h1>
 
 <img
-src="${proof}"
+src="${request.proof}"
 alt="Uploaded Payment Proof">
 
 </body>
 
 </html>
+
 `
 
 );
+
 
 proofWindow.document.close();
 
 }
 
 
-function approvePayment(index){
+function approvePayment(
 
-const request=
+requestId
 
-pendingPayments[index];
+){
 
-
-const allRequests=
+const requests =
 
 JSON.parse(
 
@@ -835,21 +850,40 @@ localStorage.getItem(
 ) || [];
 
 
-const requestIndex=
+const requestIndex =
 
-allRequests.findIndex(
+requests.findIndex(
 
-item=>
+item =>
 
-item.id===
-request.id
+item.id === requestId
 
 );
 
 
-if(requestIndex!==-1){
+if(
 
-allRequests[requestIndex].status=
+requestIndex === -1
+
+){
+
+alert(
+
+"❌ Payment request not found."
+
+);
+
+return;
+
+}
+
+
+const request =
+
+requests[requestIndex];
+
+
+requests[requestIndex].status =
 
 "approved";
 
@@ -858,14 +892,12 @@ localStorage.setItem(
 
 "mfzPaymentRequests",
 
-JSON.stringify(allRequests)
+JSON.stringify(requests)
 
 );
 
-}
 
-
-const users=
+users =
 
 JSON.parse(
 
@@ -876,30 +908,51 @@ localStorage.getItem(
 ) || [];
 
 
-const userIndex=
+const userIndex =
 
 users.findIndex(
 
-user=>
+user =>
 
-user.username===
+user.username ===
 request.username &&
 
-user.role===
+user.role ===
 "student"
 
 );
 
 
-if(userIndex!==-1){
-
 if(
 
-!users[userIndex].approvedBatches
+userIndex === -1
 
 ){
 
-users[userIndex].approvedBatches=[];
+alert(
+
+"❌ Student account not found."
+
+);
+
+return;
+
+}
+
+
+if(
+
+!Array.isArray(
+
+users[userIndex].approvedBatches
+
+)
+
+){
+
+users[userIndex].approvedBatches =
+
+[];
 
 }
 
@@ -931,29 +984,26 @@ JSON.stringify(users)
 
 );
 
-}
-
 
 alert(
 
-"✅ Payment approved! Batch access has been activated."
+"✅ Payment approved! Class 6 Batch has been activated."
 
 );
 
 
-location.reload();
+loadDashboard();
 
 }
 
 
-function rejectPayment(index){
+function rejectPayment(
 
-const request=
+requestId
 
-pendingPayments[index];
+){
 
-
-const allRequests=
+const requests =
 
 JSON.parse(
 
@@ -964,21 +1014,29 @@ localStorage.getItem(
 ) || [];
 
 
-const requestIndex=
+const requestIndex =
 
-allRequests.findIndex(
+requests.findIndex(
 
-item=>
+item =>
 
-item.id===
-request.id
+item.id === requestId
 
 );
 
 
-if(requestIndex!==-1){
+if(
 
-allRequests[requestIndex].status=
+requestIndex === -1
+
+){
+
+return;
+
+}
+
+
+requests[requestIndex].status =
 
 "rejected";
 
@@ -987,11 +1045,9 @@ localStorage.setItem(
 
 "mfzPaymentRequests",
 
-JSON.stringify(allRequests)
+JSON.stringify(requests)
 
 );
-
-}
 
 
 alert(
@@ -1001,20 +1057,28 @@ alert(
 );
 
 
-location.reload();
+loadDashboard();
 
 }
+
 
 function logoutAdmin(){
 
 localStorage.removeItem(
+
 "mfzCurrentUser"
+
 );
 
-window.location.href=
+
+window.location.href =
+
 "login.html";
 
 }
+
+
+loadDashboard();
 
 </script>
 
