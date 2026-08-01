@@ -210,6 +210,115 @@ window.location.href=
 
 function submitProof(){
 
+const fileInput =
+document.getElementById("paymentProof");
+
+const file =
+fileInput.files[0];
+
+const message =
+document.getElementById("message");
+
+if(!file){
+
+message.innerHTML =
+"⚠️ पहले payment proof की photo select करो.";
+
+return;
+
+}
+
+message.innerHTML =
+"⏳ Payment proof upload हो रहा है...";
+
+const reader =
+new FileReader();
+
+reader.onload =
+function(event){
+
+let requests =
+JSON.parse(
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+) || [];
+
+const currentUser =
+JSON.parse(
+localStorage.getItem(
+"mfzCurrentUser"
+)
+);
+
+if(!currentUser){
+
+message.innerHTML =
+"❌ Login नहीं मिला। दोबारा login करो.";
+
+return;
+
+}
+
+requests.push({
+
+id: Date.now(),
+
+username:
+currentUser.username,
+
+batch:
+"Class 6 Batch",
+
+proof:
+event.target.result,
+
+status:
+"pending",
+
+submittedAt:
+new Date().toLocaleString()
+
+});
+
+localStorage.setItem(
+
+"mfzPaymentRequests",
+
+JSON.stringify(requests)
+
+);
+
+message.innerHTML =
+"✅ Payment proof submit हो गया! आपकी request 24 घंटे के अंदर check होगी.";
+
+setTimeout(
+
+function(){
+
+window.location.href =
+"student.html";
+
+},
+
+1500
+
+);
+
+};
+
+reader.onerror =
+function(){
+
+message.innerHTML =
+"❌ Photo upload नहीं हुई। दूसरी छोटी photo try करो.";
+
+};
+
+reader.readAsDataURL(file);
+
+}{
+
 const file=
 
 document
