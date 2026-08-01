@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-Upload Payment Proof - MFZ
-</title>
+<title>Upload Payment Proof - MFZ</title>
 
 <style>
 
@@ -34,7 +29,7 @@ padding:20px;
 
 .box{
 width:100%;
-max-width:520px;
+max-width:500px;
 background:#16213e;
 padding:30px;
 border-radius:20px;
@@ -60,26 +55,15 @@ border-radius:8px;
 margin:20px 0;
 }
 
-.preview-box{
+#preview{
 display:none;
-margin:10px 0 20px;
-padding:12px;
-background:#0b1220;
-border-radius:12px;
-border:1px solid #263248;
-}
-
-.preview-box img{
 width:100%;
 max-height:280px;
 object-fit:contain;
-border-radius:9px;
-}
-
-.file-info{
-color:#cbd5e1;
-font-size:14px;
-margin-top:10px;
+background:#0b1220;
+border-radius:12px;
+margin-bottom:15px;
+border:1px solid #263248;
 }
 
 button{
@@ -99,7 +83,7 @@ background:#00c8ff;
 }
 
 button:disabled{
-background:#596273;
+background:#64748b;
 cursor:not-allowed;
 }
 
@@ -113,12 +97,6 @@ display:block;
 margin-top:20px;
 color:#00d4ff;
 text-decoration:none;
-}
-
-.note{
-font-size:13px;
-color:#94a3b8;
-margin-top:15px;
 }
 
 </style>
@@ -136,31 +114,19 @@ margin-top:15px;
 <p>
 
 Select your payment screenshot.
-The website will automatically
-optimize the image before saving.
+The image will be optimized
+automatically.
 
 </p>
 
 <input
 type="file"
 id="paymentProof"
-accept="image/jpeg,image/png,image/webp">
-
-<div
-class="preview-box"
-id="previewBox">
+accept="image/*">
 
 <img
-id="previewImage"
+id="preview"
 alt="Payment proof preview">
-
-<p
-class="file-info"
-id="fileInfo">
-
-</p>
-
-</div>
 
 <button
 type="button"
@@ -171,15 +137,6 @@ Submit Payment Proof
 </button>
 
 <p id="message"></p>
-
-<p class="note">
-
-For very large files,
-cloud storage will be added
-later. Normal payment screenshots
-should work here.
-
-</p>
 
 <a
 class="back"
@@ -236,28 +193,14 @@ document.getElementById(
 );
 
 
-const previewBox =
+const preview =
 
 document.getElementById(
-"previewBox"
+"preview"
 );
 
 
-const previewImage =
-
-document.getElementById(
-"previewImage"
-);
-
-
-const fileInfo =
-
-document.getElementById(
-"fileInfo"
-);
-
-
-let compressedProof =
+let finalProof =
 
 null;
 
@@ -275,10 +218,6 @@ message.innerHTML =
 
 "❌ Please login as a student.";
 
-submitButton.disabled =
-
-true;
-
 }
 
 
@@ -291,16 +230,6 @@ function(){
 const file =
 
 fileInput.files[0];
-
-
-compressedProof =
-
-null;
-
-
-previewBox.style.display =
-
-"none";
 
 
 if(
@@ -324,7 +253,7 @@ if(
 
 message.innerHTML =
 
-"❌ Please select an image file.";
+"❌ Please select an image.";
 
 fileInput.value =
 
@@ -337,79 +266,8 @@ return;
 
 message.innerHTML =
 
-"⏳ Preparing your screenshot...";
+"⏳ Preparing screenshot...";
 
-
-submitButton.disabled =
-
-true;
-
-
-compressImage(
-
-file,
-
-function(result){
-
-compressedProof =
-
-result;
-
-
-previewImage.src =
-
-result;
-
-
-previewBox.style.display =
-
-"block";
-
-
-const sizeKB =
-
-Math.round(
-
-result.length *
-0.75 /
-1024
-
-);
-
-
-fileInfo.innerHTML =
-
-"✓ Optimized image: about " +
-
-sizeKB +
-
-" KB";
-
-
-message.innerHTML =
-
-"✅ Screenshot is ready.";
-
-submitButton.disabled =
-
-false;
-
-}
-
-);
-
-}
-
-);
-
-
-function compressImage(
-
-file,
-
-callback
-
-){
 
 const reader =
 
@@ -439,19 +297,22 @@ let height =
 image.height;
 
 
-const maxWidth =
+const maximum =
 
-1200;
-
-
-const maxHeight =
-
-1200;
+1000;
 
 
 if(
 
-width > maxWidth
+width > maximum ||
+
+height > maximum
+
+){
+
+if(
+
+width >= height
 
 ){
 
@@ -460,7 +321,7 @@ height =
 Math.round(
 
 height *
-maxWidth /
+maximum /
 width
 
 );
@@ -468,23 +329,18 @@ width
 
 width =
 
-maxWidth;
+maximum;
 
 }
 
-
-if(
-
-height > maxHeight
-
-){
+else{
 
 width =
 
 Math.round(
 
 width *
-maxHeight /
+maximum /
 height
 
 );
@@ -492,7 +348,9 @@ height
 
 height =
 
-maxHeight;
+maximum;
+
+}
 
 }
 
@@ -536,58 +394,30 @@ height
 );
 
 
-let quality =
-
-0.72;
-
-
-let result =
+finalProof =
 
 canvas.toDataURL(
 
 "image/jpeg",
 
-quality
+0.65
 
 );
 
 
-while(
+preview.src =
 
-result.length >
-
-900000 &&
-
-quality >
-
-0.30
-
-){
-
-quality =
-
-quality -
-0.08;
+finalProof;
 
 
-result =
+preview.style.display =
 
-canvas.toDataURL(
-
-"image/jpeg",
-
-quality
-
-);
-
-}
+"block";
 
 
-callback(
+message.innerHTML =
 
-result
-
-);
+"✅ Screenshot is ready. Now press Submit.";
 
 };
 
@@ -600,16 +430,23 @@ message.innerHTML =
 
 "❌ This image could not be opened.";
 
-submitButton.disabled =
-
-false;
-
 };
 
 
 image.src =
 
 event.target.result;
+
+};
+
+
+reader.onerror =
+
+function(){
+
+message.innerHTML =
+
+"❌ File could not be read.";
 
 };
 
@@ -622,6 +459,8 @@ file
 
 }
 
+);
+
 
 submitButton.addEventListener(
 
@@ -631,13 +470,16 @@ function(){
 
 if(
 
-!currentUser
+!currentUser ||
+
+currentUser.role !==
+"student"
 
 ){
 
 message.innerHTML =
 
-"❌ Login session not found.";
+"❌ Please login again.";
 
 return;
 
@@ -646,13 +488,13 @@ return;
 
 if(
 
-!compressedProof
+!finalProof
 
 ){
 
 message.innerHTML =
 
-"⚠️ Please select a screenshot first.";
+"⚠️ First select a screenshot and wait until its preview appears.";
 
 return;
 
@@ -671,12 +513,12 @@ submitButton.innerText =
 
 message.innerHTML =
 
-"⏳ Saving payment request...";
+"⏳ Submitting payment proof...";
 
 
 try{
 
-const requestsText =
+const savedRequests =
 
 localStorage.getItem(
 "mfzPaymentRequests"
@@ -685,39 +527,17 @@ localStorage.getItem(
 
 let requests =
 
-requestsText
+savedRequests
 
 ?
 
 JSON.parse(
-requestsText
+savedRequests
 )
 
 :
 
 [];
-
-
-requests =
-
-requests.filter(
-
-request =>
-
-!(
-
-request.username ===
-currentUser.username &&
-
-request.batch ===
-"Class 6 Batch" &&
-
-request.status ===
-"pending"
-
-)
-
-);
 
 
 const newRequest = {
@@ -732,7 +552,7 @@ batch:
 "Class 6 Batch",
 
 proof:
-compressedProof,
+finalProof,
 
 status:
 "pending",
@@ -781,7 +601,7 @@ window.location.href =
 
 },
 
-1500
+1200
 
 );
 
@@ -796,7 +616,7 @@ error
 
 message.innerHTML =
 
-"❌ Browser storage is full. Please clear old test requests and try again.";
+"❌ Storage is full. Please delete old test payment requests.";
 
 
 submitButton.disabled =
