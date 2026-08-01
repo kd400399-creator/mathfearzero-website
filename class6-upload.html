@@ -1,13 +1,18 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Upload Payment Proof - MFZ</title>
+<title>
+Upload Payment Proof - MFZ
+</title>
 
 <style>
 
@@ -29,7 +34,7 @@ padding:20px;
 
 .box{
 width:100%;
-max-width:500px;
+max-width:520px;
 background:#16213e;
 padding:30px;
 border-radius:20px;
@@ -55,6 +60,28 @@ border-radius:8px;
 margin:20px 0;
 }
 
+.preview-box{
+display:none;
+margin:10px 0 20px;
+padding:12px;
+background:#0b1220;
+border-radius:12px;
+border:1px solid #263248;
+}
+
+.preview-box img{
+width:100%;
+max-height:280px;
+object-fit:contain;
+border-radius:9px;
+}
+
+.file-info{
+color:#cbd5e1;
+font-size:14px;
+margin-top:10px;
+}
+
 button{
 width:100%;
 padding:14px;
@@ -71,6 +98,11 @@ button:hover{
 background:#00c8ff;
 }
 
+button:disabled{
+background:#596273;
+cursor:not-allowed;
+}
+
 #message{
 margin-top:18px;
 font-weight:bold;
@@ -83,6 +115,12 @@ color:#00d4ff;
 text-decoration:none;
 }
 
+.note{
+font-size:13px;
+color:#94a3b8;
+margin-top:15px;
+}
+
 </style>
 
 </head>
@@ -91,20 +129,38 @@ text-decoration:none;
 
 <div class="box">
 
-<h1>📤 Upload Payment Proof</h1>
+<h1>
+📤 Upload Payment Proof
+</h1>
 
 <p>
 
-Upload your payment proof.
-Your request will be reviewed
-within 24 hours.
+Select your payment screenshot.
+The website will automatically
+optimize the image before saving.
 
 </p>
 
 <input
 type="file"
 id="paymentProof"
-accept="image/*">
+accept="image/jpeg,image/png,image/webp">
+
+<div
+class="preview-box"
+id="previewBox">
+
+<img
+id="previewImage"
+alt="Payment proof preview">
+
+<p
+class="file-info"
+id="fileInfo">
+
+</p>
+
+</div>
 
 <button
 type="button"
@@ -115,6 +171,15 @@ Submit Payment Proof
 </button>
 
 <p id="message"></p>
+
+<p class="note">
+
+For very large files,
+cloud storage will be added
+later. Normal payment screenshots
+should work here.
+
+</p>
 
 <a
 class="back"
@@ -129,198 +194,240 @@ href="student.html">
 <script>
 
 const currentUserText =
+
 localStorage.getItem(
 "mfzCurrentUser"
 );
 
+
 const currentUser =
+
 currentUserText
-? JSON.parse(currentUserText)
-: null;
 
+?
 
-if(!currentUser){
+JSON.parse(
+currentUserText
+)
 
-document.getElementById(
-"message"
-).innerHTML =
-"❌ Please login again.";
+:
 
-}
+null;
 
-
-document.getElementById(
-"submitButton"
-).addEventListener(
-
-"click",
-
-function(){
-
-const message =
-document.getElementById(
-"message"
-);
 
 const fileInput =
+
 document.getElementById(
 "paymentProof"
 );
 
+
+const submitButton =
+
+document.getElementById(
+"submitButton"
+);
+
+
+const message =
+
+document.getElementById(
+"message"
+);
+
+
+const previewBox =
+
+document.getElementById(
+"previewBox"
+);
+
+
+const previewImage =
+
+document.getElementById(
+"previewImage"
+);
+
+
+const fileInfo =
+
+document.getElementById(
+"fileInfo"
+);
+
+
+let compressedProof =
+
+null;
+
+
+if(
+
+!currentUser ||
+
+currentUser.role !==
+"student"
+
+){
+
+message.innerHTML =
+
+"❌ Please login as a student.";
+
+submitButton.disabled =
+
+true;
+
+}
+
+
+fileInput.addEventListener(
+
+"change",
+
+function(){
+
 const file =
+
 fileInput.files[0];
 
 
-if(!currentUser){
+compressedProof =
 
-message.innerHTML =
-"❌ Login session not found.";
+null;
+
+
+previewBox.style.display =
+
+"none";
+
+
+if(
+
+!file
+
+){
 
 return;
 
 }
 
 
-if(!file){
+if(
+
+!file.type.startsWith(
+"image/"
+)
+
+){
 
 message.innerHTML =
-"⚠️ Please select a photo first.";
+
+"❌ Please select an image file.";
+
+fileInput.value =
+
+"";
 
 return;
 
 }
 
 
+message.innerHTML =
 
+"⏳ Preparing your screenshot...";
+
+
+submitButton.disabled =
+
+true;
+
+
+compressImage(
+
+file,
+
+function(result){
+
+compressedProof =
+
+result;
+
+
+previewImage.src =
+
+result;
+
+
+previewBox.style.display =
+
+"block";
+
+
+const sizeKB =
+
+Math.round(
+
+result.length *
+0.75 /
+1024
+
+);
+
+
+fileInfo.innerHTML =
+
+"✓ Optimized image: about " +
+
+sizeKB +
+
+" KB";
 
 
 message.innerHTML =
-"⏳ Uploading payment proof...";
 
+"✅ Screenshot is ready.";
+
+submitButton.disabled =
+
+false;
+
+}
+
+);
+
+}
+
+);
+
+
+function compressImage(
+
+file,
+
+callback
+
+){
 
 const reader =
+
 new FileReader();
 
 
 reader.onload =
+
 function(event){
-
-try{
-
-const requestsText =
-localStorage.getItem(
-"mfzPaymentRequests"
-);
-
-const requests =
-requestsText
-? JSON.parse(requestsText)
-: [];
-
-
-const newRequest = {
-
-id:
-Date.now(),
-
-username:
-currentUser.username,
-
-batch:
-"Class 6 Batch",
-
-proof:
-event.target.result,
-
-status:
-"pending",
-
-submittedAt:
-new Date().toLocaleString()
-
-};
-
-
-requests.push(
-newRequest
-);
-
-
-localStorage.setItem(
-
-"mfzPaymentRequests",
-
-JSON.stringify(
-requests
-)
-
-);
-
-
-message.innerHTML =
-"✅ Payment proof submitted successfully!";
-
-
-setTimeout(
-
-function(){
-
-window.location.href =
-"student.html";
-
-},
-
-1500
-
-);
-
-}catch(error){
-
-message.innerHTML =
-"❌ Upload failed. Please use a smaller photo.";
-
-console.log(
-error
-);
-
-}
-
-};
-
-
-reader.onerror =
-function(){
-
-message.innerHTML =
-"❌ This photo could not be read. Please choose another photo.";
-
-};
-
 
 const image =
 
 new Image();
 
 
-const imageReader =
-
-new FileReader();
-
-
-imageReader.onload =
-
-function(e){
-
 image.onload =
 
 function(){
-
-const canvas =
-
-document.createElement(
-"canvas"
-);
-
 
 let width =
 
@@ -332,22 +439,19 @@ let height =
 image.height;
 
 
-const maxSize =
+const maxWidth =
 
-1600;
+1200;
 
 
-if(
+const maxHeight =
 
-width > maxSize ||
+1200;
 
-height > maxSize
-
-){
 
 if(
 
-width > height
+width > maxWidth
 
 ){
 
@@ -356,34 +460,48 @@ height =
 Math.round(
 
 height *
-maxSize /
+maxWidth /
 width
 
 );
 
+
 width =
 
-maxSize;
+maxWidth;
 
-}else{
+}
+
+
+if(
+
+height > maxHeight
+
+){
 
 width =
 
 Math.round(
 
 width *
-maxSize /
+maxHeight /
 height
 
 );
 
+
 height =
 
-maxSize;
+maxHeight;
 
 }
 
-}
+
+const canvas =
+
+document.createElement(
+"canvas"
+);
 
 
 canvas.width =
@@ -418,43 +536,279 @@ height
 );
 
 
-const compressedProof =
+let quality =
+
+0.72;
+
+
+let result =
 
 canvas.toDataURL(
 
 "image/jpeg",
 
-0.80
+quality
 
 );
 
 
-reader.onload({
+while(
 
-target:{
+result.length >
 
-result:
+900000 &&
 
-compressedProof
+quality >
+
+0.30
+
+){
+
+quality =
+
+quality -
+0.08;
+
+
+result =
+
+canvas.toDataURL(
+
+"image/jpeg",
+
+quality
+
+);
 
 }
 
-});
+
+callback(
+
+result
+
+);
 
 };
+
+
+image.onerror =
+
+function(){
+
+message.innerHTML =
+
+"❌ This image could not be opened.";
+
+submitButton.disabled =
+
+false;
+
+};
+
 
 image.src =
 
-e.target.result;
+event.target.result;
 
 };
 
 
-imageReader.readAsDataURL(
+reader.readAsDataURL(
 
 file
 
 );
+
+}
+
+
+submitButton.addEventListener(
+
+"click",
+
+function(){
+
+if(
+
+!currentUser
+
+){
+
+message.innerHTML =
+
+"❌ Login session not found.";
+
+return;
+
+}
+
+
+if(
+
+!compressedProof
+
+){
+
+message.innerHTML =
+
+"⚠️ Please select a screenshot first.";
+
+return;
+
+}
+
+
+submitButton.disabled =
+
+true;
+
+
+submitButton.innerText =
+
+"Submitting...";
+
+
+message.innerHTML =
+
+"⏳ Saving payment request...";
+
+
+try{
+
+const requestsText =
+
+localStorage.getItem(
+"mfzPaymentRequests"
+);
+
+
+let requests =
+
+requestsText
+
+?
+
+JSON.parse(
+requestsText
+)
+
+:
+
+[];
+
+
+requests =
+
+requests.filter(
+
+request =>
+
+!(
+
+request.username ===
+currentUser.username &&
+
+request.batch ===
+"Class 6 Batch" &&
+
+request.status ===
+"pending"
+
+)
+
+);
+
+
+const newRequest = {
+
+id:
+Date.now(),
+
+username:
+currentUser.username,
+
+batch:
+"Class 6 Batch",
+
+proof:
+compressedProof,
+
+status:
+"pending",
+
+submittedAt:
+new Date().toLocaleString()
+
+};
+
+
+requests.push(
+
+newRequest
+
+);
+
+
+localStorage.setItem(
+
+"mfzPaymentRequests",
+
+JSON.stringify(
+requests
+)
+
+);
+
+
+message.innerHTML =
+
+"✅ Payment proof submitted successfully!";
+
+
+submitButton.innerText =
+
+"Submitted ✓";
+
+
+setTimeout(
+
+function(){
+
+window.location.href =
+
+"student.html";
+
+},
+
+1500
+
+);
+
+}
+
+catch(error){
+
+console.log(
+error
+);
+
+
+message.innerHTML =
+
+"❌ Browser storage is full. Please clear old test requests and try again.";
+
+
+submitButton.disabled =
+
+false;
+
+
+submitButton.innerText =
+
+"Submit Payment Proof";
+
+}
 
 }
 
