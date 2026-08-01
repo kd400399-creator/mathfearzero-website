@@ -270,7 +270,7 @@ href="index.html">
 <script>
 
 let selectedRole="student";
-
+const ADMIN_USERNAME = "kartik dubey";
 
 function selectRole(role){
 
@@ -567,19 +567,39 @@ return;
 }
 
 
+if(
+user.username.toLowerCase() ===
+ADMIN_USERNAME.toLowerCase()
+){
+
+user.role = "admin";
+
 localStorage.setItem(
-
 "mfzCurrentUser",
-
 JSON.stringify(user)
-
 );
 
+message.innerHTML=
+"✅ Admin login successful!";
+
+setTimeout(function(){
+
+window.location.href=
+"admin.html";
+
+},700);
+
+return;
+
+}
+
+localStorage.setItem(
+"mfzCurrentUser",
+JSON.stringify(user)
+);
 
 message.innerHTML=
-
 "✅ Login successful!";
-
 
 setTimeout(
 
