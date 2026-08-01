@@ -7,102 +7,80 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MFZ Payment Proof Upload</title>
+<title>Upload Payment Proof - MFZ</title>
 
 <style>
 
 *{
-margin:0;
-padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
 
 body{
+margin:0;
+min-height:100vh;
 background:#0b1220;
 color:white;
-min-height:100vh;
-}
-
-nav{
 display:flex;
-justify-content:space-between;
+justify-content:center;
 align-items:center;
-padding:18px 8%;
-background:#111827;
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-color:#00d4ff;
-}
-
-.back{
-background:#ff9800;
-color:white;
-text-decoration:none;
-padding:10px 18px;
-border-radius:8px;
+padding:20px;
 }
 
 .box{
-width:90%;
-max-width:600px;
-margin:55px auto;
-padding:35px;
+width:100%;
+max-width:500px;
 background:#16213e;
-border-radius:22px;
+padding:30px;
+border-radius:20px;
 text-align:center;
 }
 
 h1{
 color:#00d4ff;
-margin-bottom:15px;
+margin-top:0;
 }
 
 p{
-color:#d4d4d4;
-line-height:25px;
-margin:12px 0;
-}
-
-.upload-area{
-margin-top:25px;
-padding:25px;
-border:2px dashed #00d4ff;
-border-radius:15px;
+color:#cbd5e1;
+line-height:24px;
 }
 
 input{
 width:100%;
-margin:15px 0;
-padding:12px;
 background:white;
 color:black;
+padding:12px;
 border-radius:8px;
+margin:20px 0;
 }
 
-.submit{
+button{
 width:100%;
-padding:15px;
+padding:14px;
 border:none;
-border-radius:10px;
+border-radius:9px;
 background:#ff9800;
 color:white;
 font-size:17px;
 font-weight:bold;
 cursor:pointer;
-margin-top:15px;
 }
 
-.submit:hover{
+button:hover{
 background:#00c8ff;
 }
 
-.message{
+#message{
 margin-top:18px;
 font-weight:bold;
+}
+
+.back{
+display:block;
+margin-top:20px;
+color:#00d4ff;
+text-decoration:none;
 }
 
 </style>
@@ -111,292 +89,148 @@ font-weight:bold;
 
 <body>
 
-<nav>
-
-<div class="logo">
-
-MFZ
-
-</div>
-
-<a
-class="back"
-href="classes.html">
-
-← Back
-
-</a>
-
-</nav>
-
-
 <div class="box">
 
-<h1>
-
-📤 Upload Payment Proof
-
-</h1>
+<h1>📤 Upload Payment Proof</h1>
 
 <p>
 
-Upload your payment screenshot.
-Your request will be checked and
-approved within 24 hours.
+Upload your payment proof.
+Your request will be reviewed
+within 24 hours.
 
 </p>
-
-
-<div class="upload-area">
 
 <input
 type="file"
 id="paymentProof"
 accept="image/*">
 
-<p>
-
-Select your payment screenshot.
-
-</p>
-
-</div>
-
-
 <button
-class="submit"
-onclick="submitProof()">
+type="button"
+id="submitButton">
 
 Submit Payment Proof
 
 </button>
 
+<p id="message"></p>
 
-<p
-class="message"
-id="message">
+<a
+class="back"
+href="student.html">
 
-</p>
+← Back to Dashboard
+
+</a>
 
 </div>
 
-
 <script>
 
-const currentUser=
-
-JSON.parse(
-
+const currentUserText =
 localStorage.getItem(
 "mfzCurrentUser"
-)
-
 );
 
+const currentUser =
+currentUserText
+? JSON.parse(currentUserText)
+: null;
 
-if(
 
-!currentUser ||
+if(!currentUser){
 
-currentUser.role!=="student"
-
-){
-
-window.location.href=
-"login.html";
+document.getElementById(
+"message"
+).innerHTML =
+"❌ Please login again.";
 
 }
 
 
-function submitProof(){
+document.getElementById(
+"submitButton"
+).addEventListener(
+
+"click",
+
+function(){
+
+const message =
+document.getElementById(
+"message"
+);
 
 const fileInput =
-document.getElementById("paymentProof");
+document.getElementById(
+"paymentProof"
+);
 
 const file =
 fileInput.files[0];
 
-const message =
-document.getElementById("message");
-
-if(!file){
-
-message.innerHTML =
-"⚠️ पहले payment proof की photo select करो.";
-
-return;
-
-}
-
-message.innerHTML =
-"⏳ Payment proof upload हो रहा है...";
-
-const reader =
-new FileReader();
-
-reader.onload =
-function(event){
-
-let requests =
-JSON.parse(
-localStorage.getItem(
-"mfzPaymentRequests"
-)
-) || [];
-
-const currentUser =
-JSON.parse(
-localStorage.getItem(
-"mfzCurrentUser"
-)
-);
 
 if(!currentUser){
 
 message.innerHTML =
-"❌ Login नहीं मिला। दोबारा login करो.";
+"❌ Login session not found.";
 
 return;
 
 }
-
-requests.push({
-
-id: Date.now(),
-
-username:
-currentUser.username,
-
-batch:
-"Class 6 Batch",
-
-proof:
-event.target.result,
-
-status:
-"pending",
-
-submittedAt:
-new Date().toLocaleString()
-
-});
-
-localStorage.setItem(
-
-"mfzPaymentRequests",
-
-JSON.stringify(requests)
-
-);
-
-message.innerHTML =
-"✅ Payment proof submit हो गया! आपकी request 24 घंटे के अंदर check होगी.";
-
-setTimeout(
-
-function(){
-
-window.location.href =
-"student.html";
-
-},
-
-1500
-
-);
-
-};
-
-reader.onerror =
-function(){
-
-message.innerHTML =
-"❌ Photo upload नहीं हुई। दूसरी छोटी photo try करो.";
-
-};
-
-reader.readAsDataURL(file);
-
-}{
-
-const file=
-
-document
-.getElementById(
-"paymentProof"
-)
-.files[0];
-
-
-const message=
-
-document
-.getElementById(
-"message"
-);
 
 
 if(!file){
 
-message.innerHTML=
-
-"⚠️ Please select a payment screenshot.";
+message.innerHTML =
+"⚠️ Please select a photo first.";
 
 return;
 
 }
 
 
-const reader=
+if(
 
+file.size >
+2 * 1024 * 1024
+
+){
+
+message.innerHTML =
+"⚠️ Photo is too large. Please upload a photo below 2 MB.";
+
+return;
+
+}
+
+
+message.innerHTML =
+"⏳ Uploading payment proof...";
+
+
+const reader =
 new FileReader();
 
 
-reader.onload=
-
+reader.onload =
 function(event){
 
-const requests=
+try{
 
-JSON.parse(
-
+const requestsText =
 localStorage.getItem(
 "mfzPaymentRequests"
-)
-
-) || [];
-
-
-const alreadySubmitted=
-
-requests.find(
-
-request=>
-
-request.username===
-currentUser.username &&
-
-request.batch===
-"Class 6 Batch" &&
-
-request.status===
-"pending"
-
 );
 
-
-if(alreadySubmitted){
-
-message.innerHTML=
-
-"⏳ Your Class 6 request is already pending.";
-
-return;
-
-}
+const requests =
+requestsText
+? JSON.parse(requestsText)
+: [];
 
 
-requests.push({
+const newRequest = {
 
 id:
 Date.now(),
@@ -416,28 +250,34 @@ status:
 submittedAt:
 new Date().toLocaleString()
 
-});
+};
+
+
+requests.push(
+newRequest
+);
 
 
 localStorage.setItem(
 
 "mfzPaymentRequests",
 
-JSON.stringify(requests)
+JSON.stringify(
+requests
+)
 
 );
 
 
-message.innerHTML=
-
-"✅ Payment proof submitted! Your request is pending admin approval.";
+message.innerHTML =
+"✅ Payment proof submitted successfully!";
 
 
 setTimeout(
 
 function(){
 
-window.location.href=
+window.location.href =
 "student.html";
 
 },
@@ -445,6 +285,26 @@ window.location.href=
 1500
 
 );
+
+}catch(error){
+
+message.innerHTML =
+"❌ Upload failed. Please use a smaller photo.";
+
+console.log(
+error
+);
+
+}
+
+};
+
+
+reader.onerror =
+function(){
+
+message.innerHTML =
+"❌ This photo could not be read. Please choose another photo.";
 
 };
 
@@ -454,6 +314,8 @@ file
 );
 
 }
+
+);
 
 </script>
 
