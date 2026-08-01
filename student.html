@@ -1,58 +1,217 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-MFZ Student Dashboard
-</title>
+<title>MFZ Student Dashboard</title>
 
 <style>
 
-body{
+*{
 margin:0;
-font-family:Arial;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
 background:#0b1220;
 color:white;
+min-height:100vh;
 }
 
 nav{
-background:#111827;
-padding:20px 8%;
 display:flex;
 justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+background:#111827;
+border-bottom:1px solid #263248;
 }
 
 .logo{
-font-size:28px;
+font-size:27px;
 font-weight:bold;
 color:#00d4ff;
 }
 
+.user-area{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.username{
+color:#dbeafe;
+font-weight:bold;
+}
+
 .logout{
+border:none;
 background:#ff9800;
 color:white;
-border:none;
 padding:10px 18px;
 border-radius:8px;
+font-weight:bold;
 cursor:pointer;
 }
 
-.main{
-padding:60px 8%;
+.logout:hover{
+background:#00c8ff;
 }
 
-.card{
+.container{
+width:90%;
+max-width:1100px;
+margin:40px auto;
+}
+
+.welcome{
 background:#16213e;
-padding:30px;
+padding:28px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.welcome h1{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.welcome p{
+color:#cbd5e1;
+line-height:24px;
+}
+
+.section-title{
+font-size:25px;
+margin:28px 0 15px;
+}
+
+.empty-box{
+background:#16213e;
+padding:35px;
 border-radius:18px;
-margin-top:25px;
+text-align:center;
+color:#cbd5e1;
+}
+
+.empty-box h3{
+color:white;
+margin-bottom:10px;
+font-size:22px;
+}
+
+.explore{
+display:inline-block;
+margin-top:18px;
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:13px 22px;
+border-radius:9px;
+font-weight:bold;
+}
+
+.explore:hover{
+background:#00c8ff;
+}
+
+.batch-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.batch-card{
+background:#16213e;
+padding:25px;
+border-radius:18px;
+}
+
+.batch-card h3{
+color:#00d4ff;
+margin-bottom:12px;
+}
+
+.batch-card p{
+color:#cbd5e1;
+margin:7px 0;
+}
+
+.status{
+display:inline-block;
+margin-top:13px;
+padding:7px 12px;
+border-radius:20px;
+background:#123c2b;
+color:#62f6a7;
+font-weight:bold;
+}
+
+.open-batch{
+width:100%;
+margin-top:18px;
+padding:13px;
+border:none;
+border-radius:9px;
+background:#ff9800;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.open-batch:hover{
+background:#00c8ff;
+}
+
+.info-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(240px,1fr));
+gap:18px;
+}
+
+.info-card{
+background:#16213e;
+padding:22px;
+border-radius:16px;
+}
+
+.info-card h3{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.info-card p{
+color:#cbd5e1;
+line-height:23px;
+}
+
+@media(max-width:600px){
+
+nav{
+padding:15px 5%;
+}
+
+.username{
+display:none;
+}
+
+.container{
+width:92%;
+}
+
+.welcome h1{
+font-size:25px;
+}
+
 }
 
 </style>
@@ -64,122 +223,350 @@ margin-top:25px;
 <nav>
 
 <div class="logo">
-MFZ Student
+
+MFZ Learning
+
 </div>
+
+<div class="user-area">
+
+<span
+class="username"
+id="username">
+
+Student
+
+</span>
 
 <button
 class="logout"
-onclick="logout()">
+onclick="logoutUser()">
 
 Logout
 
 </button>
 
+</div>
+
 </nav>
 
-<div class="main">
+
+<main class="container">
+
+<section class="welcome">
 
 <h1>
-Welcome to MFZ 🎉
+
+Welcome, <span id="welcomeName">
+Student
+</span>! 👋
+
 </h1>
 
-<div class="card">
+<p>
 
-<h2>
-My Batches
+Welcome to your MFZ Learning Dashboard.
+Your approved batches, live classes
+and recorded lectures will appear here.
+
+</p>
+
+</section>
+
+
+<h2 class="section-title">
+
+📚 My Batches
+
 </h2>
 
+<div
+id="batchArea">
+
+</div>
+
+
+<h2 class="section-title">
+
+📅 Live Classes
+
+</h2>
+
+<div class="info-grid">
+
+<div class="info-card">
+
+<h3>
+
+⏰ Upcoming Classes
+
+</h3>
+
 <p>
-Your purchased batches will appear here.
+
+Your upcoming live classes will
+appear here after your batch is active.
+
 </p>
 
 </div>
 
-<div class="card">
 
-<h2>
-Classes
-</h2>
+<div class="info-card">
 
-<p>
-Live and recorded classes will appear here.
-</p>
+<h3>
 
-</div>
+🔴 Live Now
 
-<div class="card">
-
-<h2>
-Notes & Tests
-</h2>
+</h3>
 
 <p>
-Notes and tests will appear here.
+
+When your teacher starts a live class,
+the Join Live Class button will appear here.
+
 </p>
 
 </div>
 
 </div>
 
-<script type="module">
 
-import {
-initializeApp
+<h2 class="section-title">
+
+📹 Recorded Classes
+
+</h2>
+
+<div class="info-card">
+
+<h3>
+
+Recorded Lectures
+
+</h3>
+
+<p>
+
+Recorded classes from your approved
+batches will appear here.
+
+</p>
+
+</div>
+
+</main>
+
+
+<script>
+
+const currentUser=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzCurrentUser"
+)
+
+);
+
+
+if(
+
+!currentUser ||
+
+currentUser.role!=="student"
+
+){
+
+window.location.href=
+"login.html";
+
 }
 
-from
 
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+document
+.getElementById("username")
+.innerText=
 
-import {
-getAuth,
-signOut
+currentUser.username;
+
+
+document
+.getElementById("welcomeName")
+.innerText=
+
+currentUser.username;
+
+
+const users=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzUsers"
+)
+
+) || [];
+
+
+const latestUser=
+
+users.find(
+
+user=>
+
+user.username===
+currentUser.username &&
+
+user.role==="student"
+
+);
+
+
+const approvedBatches=
+
+latestUser &&
+latestUser.approvedBatches
+
+? latestUser.approvedBatches
+
+: [];
+
+
+const batchArea=
+
+document
+.getElementById(
+"batchArea"
+);
+
+
+if(
+
+approvedBatches.length===0
+
+){
+
+batchArea.innerHTML=
+
+`
+
+<div class="empty-box">
+
+<h3>
+
+No Active Batch Yet
+
+</h3>
+
+<p>
+
+You have not purchased or received
+approval for any batch yet.
+
+</p>
+
+<a
+class="explore"
+href="classes.html">
+
+Explore Courses
+
+</a>
+
+</div>
+
+`;
+
+}else{
+
+let batchHTML=
+
+`<div class="batch-grid">`;
+
+
+approvedBatches.forEach(
+
+function(batch){
+
+batchHTML+=
+
+`
+
+<div class="batch-card">
+
+<h3>
+
+📘 ${batch}
+
+</h3>
+
+<p>
+
+Your batch is active and ready.
+
+</p>
+
+<span class="status">
+
+✓ Active
+
+</span>
+
+<button
+class="open-batch"
+onclick="openBatch('${batch}')">
+
+Open Batch
+
+</button>
+
+</div>
+
+`;
+
 }
 
-from
 
-"https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-
-const firebaseConfig = {
-
-apiKey:
-"AIzaSyC5A7xCZjLgVEIz1SOE9oju2dpui76xAig",
-
-authDomain:
-"mfz-learning.firebaseapp.com",
-
-projectId:
-"mfz-learning",
-
-storageBucket:
-"mfz-learning.firebasestorage.app",
-
-messagingSenderId:
-"793150284094",
-
-appId:
-"1:793150284094:web:17ebcdc2bab15141c28c6f"
-
-};
+);
 
 
-const app =
-initializeApp(firebaseConfig);
+batchHTML+=
 
-const auth =
-getAuth(app);
+`</div>`;
 
 
-window.logout =
-async function(){
+batchArea.innerHTML=
 
-await signOut(auth);
+batchHTML;
 
-window.location.href =
-"index.html";
+}
 
-};
+
+function openBatch(batch){
+
+alert(
+
+batch +
+
+" will open here."
+
+);
+
+}
+
+
+function logoutUser(){
+
+localStorage.removeItem(
+"mfzCurrentUser"
+);
+
+window.location.href=
+"login.html";
+
+}
 
 </script>
 
