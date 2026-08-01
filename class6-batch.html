@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Class 6 Batch - MFZ Learning</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+min-height:100vh;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+background:#111827;
+border-bottom:1px solid #263248;
+}
+
+.logo{
+font-size:27px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.back{
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:10px 18px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.back:hover{
+background:#00c8ff;
+}
+
+.container{
+width:90%;
+max-width:1100px;
+margin:40px auto;
+}
+
+.hero{
+background:linear-gradient(
+135deg,
+#16213e,
+#1d3557
+);
+
+padding:35px;
+border-radius:22px;
+margin-bottom:30px;
+}
+
+.hero h1{
+color:#00d4ff;
+font-size:34px;
+margin-bottom:12px;
+}
+
+.hero p{
+color:#dbeafe;
+line-height:25px;
+}
+
+.section-title{
+font-size:25px;
+margin:30px 0 17px;
+}
+
+.subject-grid{
+display:grid;
+grid-template-columns:
+repeat(
+auto-fit,
+minmax(240px,1fr)
+);
+
+gap:20px;
+}
+
+.subject-card{
+background:#16213e;
+padding:25px;
+border-radius:18px;
+border:1px solid #263248;
+}
+
+.subject-card h2{
+color:#00d4ff;
+margin-bottom:12px;
+}
+
+.subject-card p{
+color:#cbd5e1;
+line-height:23px;
+}
+
+.open-subject{
+width:100%;
+margin-top:20px;
+padding:13px;
+border:none;
+border-radius:9px;
+background:#ff9800;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.open-subject:hover{
+background:#00c8ff;
+}
+
+.info{
+margin-top:30px;
+background:#16213e;
+padding:25px;
+border-radius:18px;
+color:#cbd5e1;
+line-height:25px;
+}
+
+@media(max-width:600px){
+
+nav{
+padding:15px 5%;
+}
+
+.logo{
+font-size:22px;
+}
+
+.hero{
+padding:25px;
+}
+
+.hero h1{
+font-size:28px;
+}
+
+.container{
+width:92%;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+
+MFZ Learning
+
+</div>
+
+<a
+class="back"
+href="student.html">
+
+← Dashboard
+
+</a>
+
+</nav>
+
+
+<main class="container">
+
+<section class="hero">
+
+<h1>
+
+📘 Class 6 Batch
+
+</h1>
+
+<p>
+
+Welcome to your Class 6 learning batch.
+Choose a subject to view chapters,
+lectures and study material.
+
+</p>
+
+</section>
+
+
+<h2 class="section-title">
+
+📚 Select a Subject
+
+</h2>
+
+
+<div class="subject-grid">
+
+
+<div class="subject-card">
+
+<h2>
+
+➗ Mathematics
+
+</h2>
+
+<p>
+
+Chapters, lectures,
+practice questions and
+revision classes.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('Mathematics')">
+
+Open Mathematics
+
+</button>
+
+</div>
+
+
+<div class="subject-card">
+
+<h2>
+
+🔬 Science
+
+</h2>
+
+<p>
+
+Science chapters,
+concept videos and
+important questions.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('Science')">
+
+Open Science
+
+</button>
+
+</div>
+
+
+<div class="subject-card">
+
+<h2>
+
+🌍 Social Science
+
+</h2>
+
+<p>
+
+History, Geography,
+Civics and revision
+lectures.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('Social Science')">
+
+Open Social Science
+
+</button>
+
+</div>
+
+
+<div class="subject-card">
+
+<h2>
+
+📖 English
+
+</h2>
+
+<p>
+
+Grammar, literature,
+chapter explanations
+and practice.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('English')">
+
+Open English
+
+</button>
+
+</div>
+
+
+<div class="subject-card">
+
+<h2>
+
+📝 Hindi
+
+</h2>
+
+<p>
+
+Hindi chapters,
+grammar and
+important questions.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('Hindi')">
+
+Open Hindi
+
+</button>
+
+</div>
+
+
+<div class="subject-card">
+
+<h2>
+
+🕉️ Sanskrit
+
+</h2>
+
+<p>
+
+Sanskrit lessons,
+grammar and
+practice material.
+
+</p>
+
+<button
+class="open-subject"
+onclick="openSubject('Sanskrit')">
+
+Open Sanskrit
+
+</button>
+
+</div>
+
+
+</div>
+
+
+<div class="info">
+
+<strong>
+
+📢 Batch Notice
+
+</strong>
+
+<br><br>
+
+Live classes, recorded lectures,
+chapter-wise videos and study
+material will appear here.
+
+</div>
+
+</main>
+
+
+<script>
+
+const currentUserText =
+
+localStorage.getItem(
+"mfzCurrentUser"
+);
+
+
+const currentUser =
+
+currentUserText
+
+?
+
+JSON.parse(
+currentUserText
+)
+
+:
+
+null;
+
+
+if(
+
+!currentUser ||
+
+currentUser.role !==
+"student"
+
+){
+
+window.location.href =
+"login.html";
+
+}
+
+
+function openSubject(subject){
+
+localStorage.setItem(
+
+"mfzSelectedSubject",
+
+subject
+
+);
+
+
+alert(
+
+subject +
+
+" section will open next."
+
+);
+
+}
+
+</script>
+
+</body>
+
+</html>
