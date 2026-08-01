@@ -106,9 +106,9 @@ margin-bottom:10px;
 font-size:22px;
 }
 
-.explore{
+.explore,
+.buy-batch{
 display:inline-block;
-margin-top:18px;
 background:#ff9800;
 color:white;
 text-decoration:none;
@@ -117,7 +117,16 @@ border-radius:9px;
 font-weight:bold;
 }
 
-.explore:hover{
+.explore{
+margin-top:18px;
+}
+
+.buy-batch{
+margin-bottom:18px;
+}
+
+.explore:hover,
+.buy-batch:hover{
 background:#00c8ff;
 }
 
@@ -213,20 +222,6 @@ font-size:25px;
 }
 
 }
-  .buy-batch{
-display:inline-block;
-margin-bottom:18px;
-background:#ff9800;
-color:white;
-text-decoration:none;
-padding:13px 22px;
-border-radius:9px;
-font-weight:bold;
-}
-
-.buy-batch:hover{
-background:#00c8ff;
-}
 
 </style>
 
@@ -271,7 +266,8 @@ Logout
 
 <h1>
 
-Welcome, <span id="welcomeName">
+Welcome,
+<span id="welcomeName">
 Student
 </span>! 👋
 
@@ -293,7 +289,9 @@ and recorded lectures will appear here.
 📚 My Batches
 
 </h2>
-  <a
+
+
+<a
 href="classes.html"
 class="buy-batch">
 
@@ -301,10 +299,8 @@ class="buy-batch">
 
 </a>
 
-<div
-id="batchArea">
 
-</div>
+<div id="batchArea"></div>
 
 
 <h2 class="section-title">
@@ -312,6 +308,7 @@ id="batchArea">
 📅 Live Classes
 
 </h2>
+
 
 <div class="info-grid">
 
@@ -359,6 +356,7 @@ the Join Live Class button will appear here.
 
 </h2>
 
+
 <div class="info-card">
 
 <h3>
@@ -381,46 +379,62 @@ batches will appear here.
 
 <script>
 
-const currentUser=
-
-JSON.parse(
+const currentUserText =
 
 localStorage.getItem(
 "mfzCurrentUser"
+);
+
+
+const currentUser =
+
+currentUserText
+
+?
+
+JSON.parse(
+currentUserText
 )
 
-);
+:
+
+null;
 
 
 if(
 
 !currentUser ||
 
-currentUser.role!=="student"
+currentUser.role !==
+"student"
 
 ){
 
-window.location.href=
+window.location.href =
 "login.html";
 
-}
+}else{
 
 
 document
-.getElementById("username")
-.innerText=
+.getElementById(
+"username"
+)
+.innerText =
 
 currentUser.username;
 
 
 document
-.getElementById("welcomeName")
-.innerText=
+.getElementById(
+"welcomeName"
+)
+.innerText =
 
 currentUser.username;
 
 
-const users=
+const users =
 
 JSON.parse(
 
@@ -431,20 +445,41 @@ localStorage.getItem(
 ) || [];
 
 
-const latestUser=
+const latestUser =
 
 users.find(
 
-user=>
+user =>
 
-user.username===
+user.username ===
 currentUser.username &&
 
-user.role==="student"
+user.role ===
+"student"
 
 );
 
-const paymentRequests=
+
+const approvedBatches =
+
+latestUser &&
+
+Array.isArray(
+
+latestUser.approvedBatches
+
+)
+
+?
+
+latestUser.approvedBatches
+
+:
+
+[];
+
+
+const paymentRequests =
 
 JSON.parse(
 
@@ -455,46 +490,41 @@ localStorage.getItem(
 ) || [];
 
 
-const pendingRequest=
+const pendingRequest =
 
 paymentRequests.find(
 
-request=>
+request =>
 
-request.username===
+request.username ===
 currentUser.username &&
 
-request.status===
+request.status ===
 "pending"
 
 );
-const approvedBatches=
-
-latestUser &&
-latestUser.approvedBatches
-
-? latestUser.approvedBatches
-
-: [];
 
 
-const batchArea=
+const batchArea =
 
-document
-.getElementById(
+document.getElementById(
 "batchArea"
 );
 
 
 if(
 
-approvedBatches.length===0
+approvedBatches.length === 0
 
 ){
 
-if(pendingRequest){
+if(
 
-batchArea.innerHTML=
+pendingRequest
+
+){
+
+batchArea.innerHTML =
 
 `
 
@@ -514,8 +544,8 @@ Your payment proof has been submitted.
 
 <p>
 
-Your Class 6 Batch request will
-be reviewed within 24 hours.
+Your batch request will be
+reviewed within 24 hours.
 
 </p>
 
@@ -525,7 +555,7 @@ be reviewed within 24 hours.
 
 }else{
 
-batchArea.innerHTML=
+batchArea.innerHTML =
 
 `
 
@@ -560,38 +590,8 @@ Explore Courses
 
 }else{
 
-`
 
-<div class="empty-box">
-
-<h3>
-
-No Active Batch Yet
-
-</h3>
-
-<p>
-
-You have not purchased or received
-approval for any batch yet.
-
-</p>
-
-<a
-class="explore"
-href="classes.html">
-
-Explore Courses
-
-</a>
-
-</div>
-
-`;
-
-}else{
-
-let batchHTML=
+let batchHTML =
 
 `<div class="batch-grid">`;
 
@@ -600,7 +600,7 @@ approvedBatches.forEach(
 
 function(batch){
 
-batchHTML+=
+batchHTML +=
 
 `
 
@@ -638,18 +638,19 @@ Open Batch
 
 }
 
-
 );
 
 
-batchHTML+=
+batchHTML +=
 
 `</div>`;
 
 
-batchArea.innerHTML=
+batchArea.innerHTML =
 
 batchHTML;
+
+}
 
 }
 
@@ -658,9 +659,11 @@ function openBatch(batch){
 
 alert(
 
+"📘 " +
+
 batch +
 
-" will open here."
+" is active! Batch lessons will open here."
 
 );
 
@@ -673,7 +676,7 @@ localStorage.removeItem(
 "mfzCurrentUser"
 );
 
-window.location.href=
+window.location.href =
 "login.html";
 
 }
