@@ -21,117 +21,190 @@ font-family:Arial,sans-serif;
 body{
 background:#0b1220;
 color:white;
+min-height:100vh;
 }
 
 nav{
-background:#111827;
-padding:18px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-position:sticky;
-top:0;
+padding:18px 7%;
+background:#111827;
+border-bottom:1px solid #263248;
 }
 
 .logo{
-font-size:30px;
+font-size:27px;
 font-weight:bold;
 color:#00d4ff;
+}
+
+.admin-area{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.admin-name{
+font-weight:bold;
+color:#dbeafe;
 }
 
 .logout{
+border:none;
 background:#ff9800;
 color:white;
-border:none;
-padding:11px 18px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.main{
-padding:45px 8%;
-}
-
-.main h1{
-font-size:40px;
-margin-bottom:10px;
-}
-
-.subtitle{
-color:#d4d4d4;
-margin-bottom:30px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:22px;
-}
-
-.card{
-background:#16213e;
-padding:28px;
-border-radius:18px;
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-7px);
-background:#1d4ed8;
-}
-
-.card h2{
-color:#00d4ff;
-margin-bottom:12px;
-}
-
-.card p{
-color:#d4d4d4;
-line-height:24px;
-}
-
-.panel{
-display:none;
-margin-top:35px;
-background:#16213e;
-padding:30px;
-border-radius:18px;
-}
-
-.panel h2{
-color:#00d4ff;
-margin-bottom:18px;
-}
-
-.close{
-background:#ff9800;
-color:white;
-border:none;
 padding:10px 18px;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
-margin-top:20px;
 }
 
-.item{
-background:#0b1220;
-padding:18px;
-border-radius:12px;
-margin-top:12px;
-}
-
-.action{
+.logout:hover{
 background:#00c8ff;
-color:white;
+}
+
+.container{
+width:90%;
+max-width:1150px;
+margin:40px auto;
+}
+
+.welcome{
+background:#16213e;
+padding:28px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.welcome h1{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.welcome p{
+color:#cbd5e1;
+line-height:24px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-bottom:30px;
+}
+
+.stat-card{
+background:#16213e;
+padding:23px;
+border-radius:17px;
+}
+
+.stat-card h3{
+color:#cbd5e1;
+font-size:16px;
+margin-bottom:10px;
+}
+
+.number{
+font-size:32px;
+font-weight:bold;
+color:#ff9800;
+}
+
+.section-title{
+font-size:25px;
+margin:30px 0 15px;
+}
+
+.request-box{
+background:#16213e;
+padding:25px;
+border-radius:18px;
+margin-bottom:15px;
+}
+
+.request-top{
+display:flex;
+justify-content:space-between;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.request-box h3{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.request-box p{
+color:#cbd5e1;
+margin:7px 0;
+}
+
+.pending{
+display:inline-block;
+padding:7px 12px;
+border-radius:20px;
+background:#4b3511;
+color:#ffd166;
+font-weight:bold;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+margin-top:18px;
+flex-wrap:wrap;
+}
+
+.approve,
+.reject,
+.view{
 border:none;
-padding:9px 15px;
-border-radius:7px;
+padding:11px 17px;
+border-radius:8px;
 font-weight:bold;
 cursor:pointer;
-margin-top:12px;
+}
+
+.approve{
+background:#19a463;
+color:white;
+}
+
+.reject{
+background:#dc3545;
+color:white;
+}
+
+.view{
+background:#00a9d6;
+color:white;
+}
+
+.empty{
+background:#16213e;
+padding:30px;
+border-radius:17px;
+text-align:center;
+color:#cbd5e1;
+}
+
+@media(max-width:600px){
+
+nav{
+padding:15px 5%;
+}
+
+.admin-name{
+display:none;
+}
+
+.container{
+width:92%;
+}
+
 }
 
 </style>
@@ -143,268 +216,575 @@ margin-top:12px;
 <nav>
 
 <div class="logo">
-MFZ Admin 👑
+
+MFZ Admin
+
 </div>
 
-<button class="logout" onclick="logout()">
+<div class="admin-area">
+
+<span
+class="admin-name"
+id="adminName">
+
+Admin
+
+</span>
+
+<button
+class="logout"
+onclick="logoutAdmin()">
+
 Logout
+
 </button>
+
+</div>
 
 </nav>
 
-<section class="main">
+
+<main class="container">
+
+<section class="welcome">
 
 <h1>
-Welcome, Kartik 👑
+
+Admin Dashboard 👨‍💻
+
 </h1>
 
-<p class="subtitle">
-Manage MFZ Learning from your Admin Dashboard.
-</p>
-
-<div class="grid">
-
-<div class="card" onclick="openPanel('teachers')">
-
-<h2>
-👨‍🏫 Teacher Requests
-</h2>
-
 <p>
-View and manage teacher requests.
+
+Manage teacher requests,
+payment requests and student
+batch access from one place.
+
 </p>
 
-</div>
+</section>
 
-<div class="card" onclick="openPanel('students')">
 
-<h2>
-👨‍🎓 Students
-</h2>
+<section class="stats">
 
-<p>
-View registered MFZ students.
-</p>
+<div class="stat-card">
 
-</div>
+<h3>
 
-<div class="card" onclick="openPanel('batches')">
+Pending Teacher Requests
 
-<h2>
-📚 Batches
-</h2>
+</h3>
 
-<p>
-Manage Foundation, Class 6 and Class 7 batches.
-</p>
+<div
+class="number"
+id="teacherCount">
 
-</div>
-
-<div class="card" onclick="openPanel('classes')">
-
-<h2>
-📺 Classes
-</h2>
-
-<p>
-Manage live and recorded classes.
-</p>
+0
 
 </div>
 
 </div>
 
 
-<div class="panel" id="teachers">
+<div class="stat-card">
 
-<h2>
-👨‍🏫 Teacher Requests
-</h2>
+<h3>
 
-<div class="item">
+Pending Payment Requests
 
-No teacher requests yet.
+</h3>
 
-</div>
+<div
+class="number"
+id="paymentCount">
 
-<button class="close" onclick="closePanels()">
-
-Close
-
-</button>
+0
 
 </div>
-
-
-<div class="panel" id="students">
-
-<h2>
-👨‍🎓 Registered Students
-</h2>
-
-<div class="item">
-
-Student list will appear here.
-
-</div>
-
-<button class="close" onclick="closePanels()">
-
-Close
-
-</button>
 
 </div>
 
 
-<div class="panel" id="batches">
+<div class="stat-card">
 
-<h2>
-📚 Manage Batches
-</h2>
+<h3>
 
-<div class="item">
+Total Students
 
-🌟 Foundation Batch
+</h3>
 
-<br>
+<div
+class="number"
+id="studentCount">
 
-<button class="action">
-
-Manage Foundation Batch
-
-</button>
+0
 
 </div>
-
-<div class="item">
-
-📘 Class 6 Batch
-
-<br>
-
-<button class="action">
-
-Manage Class 6 Batch
-
-</button>
-
-</div>
-
-<div class="item">
-
-📗 Class 7 Batch
-
-<br>
-
-<button class="action">
-
-Manage Class 7 Batch
-
-</button>
-
-</div>
-
-<button class="close" onclick="closePanels()">
-
-Close
-
-</button>
-
-</div>
-
-
-<div class="panel" id="classes">
-
-<h2>
-📺 Manage Classes
-</h2>
-
-<div class="item">
-
-➕ Add Live Class
-
-<br>
-
-<button class="action">
-
-Add Class
-
-</button>
-
-</div>
-
-<div class="item">
-
-🎥 Add Recorded Class
-
-<br>
-
-<button class="action">
-
-Add Recording
-
-</button>
-
-</div>
-
-<button class="close" onclick="closePanels()">
-
-Close
-
-</button>
 
 </div>
 
 </section>
 
 
+<h2 class="section-title">
+
+👨‍🏫 Teacher Requests
+
+</h2>
+
+<div
+id="teacherRequests">
+
+</div>
+
+
+<h2 class="section-title">
+
+💳 Payment Requests
+
+</h2>
+
+<div
+id="paymentRequests">
+
+</div>
+
+</main>
+
+
 <script>
 
-function closePanels(){
+const users=
 
-const panels =
+JSON.parse(
 
-document.querySelectorAll(".panel");
+localStorage.getItem(
+"mfzUsers"
+)
 
-panels.forEach(
+) || [];
 
-function(panel){
 
-panel.style.display = "none";
+const teacherArea=
+
+document.getElementById(
+"teacherRequests"
+);
+
+
+const pendingTeachers=
+
+users.filter(
+
+user=>
+
+user.role==="teacher" &&
+
+user.approved===false
+
+);
+
+
+document.getElementById(
+"teacherCount"
+).innerText=
+
+pendingTeachers.length;
+
+
+const students=
+
+users.filter(
+
+user=>
+
+user.role==="student"
+
+);
+
+
+document.getElementById(
+"studentCount"
+).innerText=
+
+students.length;
+
+
+if(
+
+pendingTeachers.length===0
+
+){
+
+teacherArea.innerHTML=
+
+`
+
+<div class="empty">
+
+No pending teacher requests.
+
+</div>
+
+`;
+
+}else{
+
+let teacherHTML="";
+
+
+pendingTeachers.forEach(
+
+function(teacher,index){
+
+teacherHTML+=
+
+`
+
+<div class="request-box">
+
+<div class="request-top">
+
+<div>
+
+<h3>
+
+${teacher.username}
+
+</h3>
+
+<p>
+
+Teacher account request
+
+</p>
+
+<span class="pending">
+
+Pending
+
+</span>
+
+</div>
+
+</div>
+
+<div class="buttons">
+
+<button
+class="approve"
+onclick="approveTeacher(${index})">
+
+✓ Approve
+
+</button>
+
+<button
+class="reject"
+onclick="rejectTeacher(${index})">
+
+✕ Reject
+
+</button>
+
+</div>
+
+</div>
+
+`;
 
 }
+
+);
+
+
+teacherArea.innerHTML=
+
+teacherHTML;
+
+}
+
+
+const paymentRequests=
+
+JSON.parse(
+
+localStorage.getItem(
+"mfzPaymentRequests"
+)
+
+) || [];
+
+
+const pendingPayments=
+
+paymentRequests.filter(
+
+request=>
+
+request.status==="pending"
+
+);
+
+
+document.getElementById(
+"paymentCount"
+).innerText=
+
+pendingPayments.length;
+
+
+const paymentArea=
+
+document.getElementById(
+"paymentRequests"
+);
+
+
+if(
+
+pendingPayments.length===0
+
+){
+
+paymentArea.innerHTML=
+
+`
+
+<div class="empty">
+
+No pending payment requests.
+
+</div>
+
+`;
+
+}else{
+
+let paymentHTML="";
+
+
+pendingPayments.forEach(
+
+function(request,index){
+
+paymentHTML+=
+
+`
+
+<div class="request-box">
+
+<h3>
+
+${request.username}
+
+</h3>
+
+<p>
+
+Batch:
+${request.batch}
+
+</p>
+
+<p>
+
+Payment request received.
+
+</p>
+
+<span class="pending">
+
+Pending
+
+</span>
+
+<div class="buttons">
+
+<button
+class="view"
+onclick="viewProof('${request.proof}')">
+
+View Proof
+
+</button>
+
+<button
+class="approve"
+onclick="approvePayment(${index})">
+
+✓ Approve
+
+</button>
+
+<button
+class="reject"
+onclick="rejectPayment(${index})">
+
+✕ Reject
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+);
+
+
+paymentArea.innerHTML=
+
+paymentHTML;
+
+}
+
+
+function approveTeacher(index){
+
+const teacher=
+
+pendingTeachers[index];
+
+
+const userIndex=
+
+users.findIndex(
+
+user=>
+
+user.username===
+teacher.username &&
+
+user.role==="teacher"
+
+);
+
+
+if(userIndex!==-1){
+
+users[userIndex].approved=true;
+
+localStorage.setItem(
+
+"mfzUsers",
+
+JSON.stringify(users)
+
+);
+
+alert(
+
+"Teacher approved successfully."
+
+);
+
+location.reload();
+
+}
+
+}
+
+
+function rejectTeacher(index){
+
+const teacher=
+
+pendingTeachers[index];
+
+
+const newUsers=
+
+users.filter(
+
+user=>
+
+!(
+
+user.username===
+teacher.username &&
+
+user.role==="teacher"
+
+)
+
+);
+
+
+localStorage.setItem(
+
+"mfzUsers",
+
+JSON.stringify(newUsers)
+
+);
+
+
+alert(
+
+"Teacher request rejected."
+
+);
+
+
+location.reload();
+
+}
+
+
+function viewProof(proof){
+
+if(proof){
+
+window.open(
+proof,
+"_blank"
+);
+
+}else{
+
+alert(
+"Payment proof is not available."
+);
+
+}
+
+}
+
+
+function approvePayment(index){
+
+alert(
+
+"Payment approval system will be connected in the next step."
 
 );
 
 }
 
 
-function openPanel(id){
+function rejectPayment(index){
 
-closePanels();
+alert(
 
-document
-.getElementById(id)
-.style.display = "block";
+"Payment rejection system will be connected in the next step."
 
-window.scrollTo({
-
-top:document
-.getElementById(id)
-.offsetTop - 80,
-
-behavior:"smooth"
-
-});
+);
 
 }
 
 
-function logout(){
+function logoutAdmin(){
 
-window.location.href =
-"index.html";
+localStorage.removeItem(
+"mfzCurrentUser"
+);
+
+window.location.href=
+"login.html";
 
 }
 
