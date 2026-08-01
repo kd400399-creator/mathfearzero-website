@@ -1,1 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Upload Payment Proof - MFZ Learning</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+margin:0;
+min-height:100vh;
+background:#0b1220;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+}
+
+.box{
+width:100%;
+max-width:560px;
+background:#16213e;
+padding:30px;
+border-radius:20px;
+text-align:center;
+border:1px solid #263248;
+}
+
+h1{
+color:#00d4ff;
+margin-top:0;
+}
+
+p{
+color:#cbd5e1;
+line-height:24px;
+}
+
+.batch-box{
+background:#0f1b33;
+padding:15px;
+border-radius:10px;
+margin:18px 0;
+color:#dbeafe;
+}
+
+input{
+width:100%;
+background:white;
+color:black;
+padding:12px;
+border-radius:8px;
+margin:18px 0 10px;
+}
+
+.file-info{
+color:#cbd5e1;
+font-size:14px;
+min-height:22px;
+}
+
+.preview{
+display:none;
+width:100%;
+max-height:280px;
+object-fit:contain;
+margin:18px 0;
+border-radius:12px;
+border:2px solid #00d4ff;
+background:#0b1220;
+}
+
+.pdf-preview{
+display:none;
+background:#263248;
+padding:15px;
+border-radius:10px;
+margin:18px 0;
+color:#ffcc66;
+font-weight:bold;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:9px;
+background:#ff9800;
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#00c8ff;
+}
+
+button:disabled{
+opacity:0.6;
+cursor:not-allowed;
+}
+
+#message{
+margin-top:18px;
+font-weight:bold;
+min-height:24px;
+}
+
+.back{
+display:block;
+margin-top:20px;
+color:#00d4ff;
+text-decoration:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>📤 Upload Payment Proof</h1>
+
+<p>
+
+Upload your payment screenshot
+or payment PDF.
+
+</p>
+
+<div class="batch-box">
+
+Selected Batch:
+
+<strong id="batchName">
+
+Class 6 Batch
+
+</strong>
+
+</div>
+
+<input
+type="file"
+id="paymentProof"
+accept="image/jpeg,image/png,image/webp,application/pdf">
+
+<div
+class="file-info"
+id="fileInfo">
+
+No file selected
+
+</div>
+
+<img
+id="imagePreview"
+class="preview"
+alt="Payment proof preview">
+
+<div
+id="pdfPreview"
+class="pdf-preview">
+
+📄 PDF selected successfully
+
+</div>
+
+<button
+type="button"
+id="submitButton">
+
+Submit Payment Proof
+
+</button>
+
+<p id="message"></p>
+
+<a
+class="back"
+href="student.html">
+
+← Back to Dashboard
+
+</a>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =================================
+PASTE YOUR SUPABASE DETAILS HERE
+================================= */
+
+const SUPABASE_URL =
+
+"https://vhakvwxsysaohsgbnfun.supabase.co/rest/v1/";
+
+
+const SUPABASE_KEY =
+
+"sb_publishable_vDIEuHqMPtpQGbZazghd-A_b6yQ7BMc";
+
+
+/* ================================= */
+
+const supabaseClient =
+
+window.supabase.createClient(
+
+SUPABASE_URL,
+
+SUPABASE_KEY
+
+);
+
+
+const currentUserText =
+
+localStorage.getItem(
+
+"mfzCurrentUser"
+
+);
+
+
+const currentUser =
+
+currentUserText
+
+?
+
+JSON.parse(
+
+currentUserText
+
+)
+
+:
+
+null;
+
+
+const selectedBatch =
+
+localStorage.getItem(
+
+"mfzSelectedBatch"
+
+)
+
+||
+
+"Class 6 Batch";
+
+
+document.getElementById(
+
+"batchName"
+
+).innerText =
+
+selectedBatch;
+
+
+const fileInput =
+
+document.getElementById(
+
+"paymentProof"
+
+);
+
+
+const fileInfo =
+
+document.getElementById(
+
+"fileInfo"
+
+);
+
+
+const imagePreview =
+
+document.getElementById(
+
+"imagePreview"
+
+);
+
+
+const pdfPreview =
+
+document.getElementById(
+
+"pdfPreview"
+
+);
+
+
+const submitButton =
+
+document.getElementById(
+
+"submitButton"
+
+);
+
+
+const message =
+
+document.getElementById(
+
+"message"
+
+);
+
+
+if(
+
+!currentUser ||
+
+currentUser.role !==
+
+"student"
+
+){
+
+message.innerHTML =
+
+"❌ Please login as a student.";
+
+submitButton.disabled =
+
+true;
+
+}
+
+
+fileInput.addEventListener(
+
+"change",
+
+function(){
+
+const file =
+
+fileInput.files[0];
+
+
+imagePreview.style.display =
+
+"none";
+
+
+pdfPreview.style.display =
+
+"none";
+
+
+if(
+
+!file
+
+){
+
+fileInfo.innerText =
+
+"No file selected";
+
+return;
+
+}
+
+
+const sizeMB =
+
+(
+
+file.size /
+
+1024 /
+
+1024
+
+).toFixed(2);
+
+
+fileInfo.innerText =
+
+file.name +
+
+" • " +
+
+sizeMB +
+
+" MB";
+
+
+if(
+
+file.size >
+
+50 * 1024 * 1024
+
+){
+
+message.innerHTML =
+
+"❌ File is larger than 50 MB.";
+
+fileInput.value =
+
+"";
+
+return;
+
+}
+
+
+message.innerHTML =
+
+"";
+
+
+if(
+
+file.type ===
+
+"application/pdf"
+
+){
+
+pdfPreview.style.display =
+
+"block";
+
+}else if(
+
+file.type.startsWith(
+
+"image/"
+
+)
+
+){
+
+imagePreview.src =
+
+URL.createObjectURL(
+
+file
+
+);
+
+
+imagePreview.style.display =
+
+"block";
+
+}
+
+}
+
+);
+
+
+submitButton.addEventListener(
+
+"click",
+
+async function(){
+
+const file =
+
+fileInput.files[0];
+
+
+if(
+
+!currentUser
+
+){
+
+message.innerHTML =
+
+"❌ Login session not found.";
+
+return;
+
+}
+
+
+if(
+
+!file
+
+){
+
+message.innerHTML =
+
+"⚠️ Please select a payment proof.";
+
+return;
+
+}
+
+
+if(
+
+file.size >
+
+50 * 1024 * 1024
+
+){
+
+message.innerHTML =
+
+"❌ File must be 50 MB or smaller.";
+
+return;
+
+}
+
+
+submitButton.disabled =
+
+true;
+
+
+submitButton.innerText =
+
+"Uploading...";
+
+
+message.innerHTML =
+
+"⏳ Uploading securely to cloud...";
+
+
+const safeUsername =
+
+currentUser.username
+
+.replace(
+
+/[^a-zA-Z0-9_-]/g,
+
+"_"
+
+);
+
+
+const safeFileName =
+
+file.name
+
+.replace(
+
+/[^a-zA-Z0-9._-]/g,
+
+"_"
+
+);
+
+
+const filePath =
+
+safeUsername +
+
+"/" +
+
+Date.now() +
+
+"-" +
+
+safeFileName;
+
+
+const uploadResult =
+
+await supabaseClient
+
+.storage
+
+.from(
+
+"payment-proofs"
+
+)
+
+.upload(
+
+filePath,
+
+file,
+
+{
+
+cacheControl:
+
+"3600",
+
+upsert:
+
+false,
+
+contentType:
+
+file.type
+
+}
+
+);
+
+
+if(
+
+uploadResult.error
+
+){
+
+console.log(
+
+uploadResult.error
+
+);
+
+
+message.innerHTML =
+
+"❌ Upload failed: " +
+
+uploadResult.error.message;
+
+
+submitButton.disabled =
+
+false;
+
+
+submitButton.innerText =
+
+"Submit Payment Proof";
+
+
+return;
+
+}
+
+
+const publicResult =
+
+supabaseClient
+
+.storage
+
+.from(
+
+"payment-proofs"
+
+)
+
+.getPublicUrl(
+
+filePath
+
+);
+
+
+const proofURL =
+
+publicResult
+
+.data
+
+.publicUrl;
+
+
+const requestsText =
+
+localStorage.getItem(
+
+"mfzPaymentRequests"
+
+);
+
+
+const requests =
+
+requestsText
+
+?
+
+JSON.parse(
+
+requestsText
+
+)
+
+:
+
+[];
+
+
+const newRequest =
+
+{
+
+id:
+
+Date.now(),
+
+username:
+
+currentUser.username,
+
+batch:
+
+selectedBatch,
+
+proof:
+
+proofURL,
+
+fileName:
+
+file.name,
+
+fileType:
+
+file.type,
+
+status:
+
+"pending",
+
+submittedAt:
+
+new Date()
+
+.toLocaleString()
+
+};
+
+
+requests.push(
+
+newRequest
+
+);
+
+
+try{
+
+localStorage.setItem(
+
+"mfzPaymentRequests",
+
+JSON.stringify(
+
+requests
+
+)
+
+);
+
+}catch(error){
+
+message.innerHTML =
+
+"⚠️ File uploaded to cloud, but request list is full. Delete old test requests.";
+
+submitButton.disabled =
+
+false;
+
+submitButton.innerText =
+
+"Submit Payment Proof";
+
+return;
+
+}
+
+
+message.innerHTML =
+
+"✅ Payment proof uploaded successfully!";
+
+
+submitButton.innerText =
+
+"Submitted ✓";
+
+
+setTimeout(
+
+function(){
+
+window.location.href =
+
+"student.html";
+
+},
+
+1500
+
+);
+
+}
+
+);
+
+</script>
+
+</body>
+
+</html>
