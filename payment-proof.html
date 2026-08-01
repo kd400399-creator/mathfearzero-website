@@ -203,23 +203,20 @@ href="student.html">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
-/* =================================
-PASTE YOUR SUPABASE DETAILS HERE
-================================= */
+/* SUPABASE SETTINGS */
 
 const SUPABASE_URL =
 
-"https://vhakvwxsysaohsgbnfun.supabase.co/rest/v1/";
+"https://vhakvwxsysaohsgbnfun.supabase.co";
 
 
 const SUPABASE_KEY =
 
 "sb_publishable_vDIEuHqMPtpQGbZazghd-A_b6yQ7BMc";
 
-
-/* ================================= */
 
 const supabaseClient =
 
@@ -231,6 +228,8 @@ SUPABASE_KEY
 
 );
 
+
+/* CURRENT USER */
 
 const currentUserText =
 
@@ -258,6 +257,8 @@ currentUserText
 null;
 
 
+/* SELECTED BATCH */
+
 const selectedBatch =
 
 localStorage.getItem(
@@ -279,6 +280,8 @@ document.getElementById(
 
 selectedBatch;
 
+
+/* PAGE ELEMENTS */
 
 const fileInput =
 
@@ -334,6 +337,8 @@ document.getElementById(
 );
 
 
+/* LOGIN CHECK */
+
 if(
 
 !currentUser ||
@@ -355,6 +360,8 @@ true;
 }
 
 
+/* FILE PREVIEW */
+
 fileInput.addEventListener(
 
 "change",
@@ -374,6 +381,11 @@ imagePreview.style.display =
 pdfPreview.style.display =
 
 "none";
+
+
+message.innerHTML =
+
+"";
 
 
 if(
@@ -401,7 +413,11 @@ file.size /
 
 1024
 
-).toFixed(2);
+).toFixed(
+
+2
+
+);
 
 
 fileInfo.innerText =
@@ -431,14 +447,13 @@ fileInput.value =
 
 "";
 
+fileInfo.innerText =
+
+"No file selected";
+
 return;
 
 }
-
-
-message.innerHTML =
-
-"";
 
 
 if(
@@ -453,7 +468,10 @@ pdfPreview.style.display =
 
 "block";
 
-}else if(
+}
+
+
+else if(
 
 file.type.startsWith(
 
@@ -482,6 +500,8 @@ imagePreview.style.display =
 
 );
 
+
+/* UPLOAD */
 
 submitButton.addEventListener(
 
@@ -553,7 +573,7 @@ submitButton.innerText =
 
 message.innerHTML =
 
-"⏳ Uploading securely to cloud...";
+"⏳ Uploading to cloud...";
 
 
 const safeUsername =
@@ -595,7 +615,17 @@ Date.now() +
 safeFileName;
 
 
-const uploadResult =
+/* UPLOAD TO SUPABASE */
+
+const {
+
+data: uploadData,
+
+error: uploadError
+
+}
+
+=
 
 await supabaseClient
 
@@ -634,13 +664,13 @@ file.type
 
 if(
 
-uploadResult.error
+uploadError
 
 ){
 
 console.log(
 
-uploadResult.error
+uploadError
 
 );
 
@@ -649,7 +679,7 @@ message.innerHTML =
 
 "❌ Upload failed: " +
 
-uploadResult.error.message;
+uploadError.message;
 
 
 submitButton.disabled =
@@ -661,13 +691,20 @@ submitButton.innerText =
 
 "Submit Payment Proof";
 
-
 return;
 
 }
 
 
-const publicResult =
+/* GET CLOUD URL */
+
+const {
+
+data: publicData
+
+}
+
+=
 
 supabaseClient
 
@@ -688,12 +725,10 @@ filePath
 
 const proofURL =
 
-publicResult
+publicData.publicUrl;
 
-.data
 
-.publicUrl;
-
+/* CREATE SMALL PAYMENT REQUEST */
 
 const requestsText =
 
@@ -704,7 +739,14 @@ localStorage.getItem(
 );
 
 
-const requests =
+let requests =
+
+[];
+
+
+try{
+
+requests =
 
 requestsText
 
@@ -719,6 +761,35 @@ requestsText
 :
 
 [];
+
+}
+
+catch(
+
+error
+
+){
+
+requests =
+
+[];
+
+}
+
+
+/* REMOVE OLD REQUESTS */
+
+requests =
+
+requests.filter(
+
+request =>
+
+request.username !==
+
+currentUser.username
+
+);
 
 
 const newRequest =
@@ -740,6 +811,10 @@ selectedBatch,
 proof:
 
 proofURL,
+
+filePath:
+
+filePath,
 
 fileName:
 
@@ -783,11 +858,17 @@ requests
 
 );
 
-}catch(error){
+}
+
+catch(
+
+error
+
+){
 
 message.innerHTML =
 
-"⚠️ File uploaded to cloud, but request list is full. Delete old test requests.";
+"⚠️ File uploaded successfully, but browser storage is full. Delete old test requests.";
 
 submitButton.disabled =
 
@@ -801,6 +882,8 @@ return;
 
 }
 
+
+/* SUCCESS */
 
 message.innerHTML =
 
