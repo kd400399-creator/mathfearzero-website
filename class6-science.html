@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Class 6 Science - MFZ Learning</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+min-height:100vh;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+background:#111827;
+border-bottom:1px solid #263248;
+}
+
+.logo{
+font-size:27px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.back{
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:10px 18px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.container{
+width:90%;
+max-width:1100px;
+margin:40px auto;
+}
+
+.hero{
+background:linear-gradient(
+135deg,
+#16213e,
+#1d3557
+);
+
+padding:35px;
+border-radius:22px;
+margin-bottom:30px;
+}
+
+.hero h1{
+color:#00d4ff;
+font-size:34px;
+margin-bottom:12px;
+}
+
+.hero p{
+color:#dbeafe;
+line-height:25px;
+}
+
+.chapter-grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(260px,1fr));
+
+gap:20px;
+}
+
+.chapter-card{
+background:#16213e;
+padding:25px;
+border-radius:18px;
+border:1px solid #263248;
+}
+
+.chapter-card h2{
+color:#00d4ff;
+margin-bottom:12px;
+font-size:21px;
+}
+
+.chapter-card p{
+color:#cbd5e1;
+line-height:23px;
+}
+
+.open{
+width:100%;
+margin-top:20px;
+padding:13px;
+border:none;
+border-radius:9px;
+background:#ff9800;
+color:white;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.open:hover{
+background:#00c8ff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+
+MFZ Learning
+
+</div>
+
+<a
+class="back"
+href="class6-batch.html">
+
+← Class 6 Batch
+
+</a>
+
+</nav>
+
+
+<main class="container">
+
+<section class="hero">
+
+<h1>
+
+🔬 Class 6 Science
+
+</h1>
+
+<p>
+
+Choose a chapter to view
+lectures and study material.
+
+</p>
+
+</section>
+
+
+<div class="chapter-grid">
+
+<div class="chapter-card">
+
+<h2>
+
+Chapter 1:
+The Wonderful World of Science
+
+</h2>
+
+<p>
+
+Learn about science,
+scientific thinking and
+the world around us.
+
+</p>
+
+<button
+class="open"
+onclick="openChapter(
+'The Wonderful World of Science'
+)">
+
+Open Chapter
+
+</button>
+
+</div>
+
+
+<div class="chapter-card">
+
+<h2>
+
+Chapter 2:
+Diversity in the Living World
+
+</h2>
+
+<p>
+
+Learn about living
+organisms and their
+different characteristics.
+
+</p>
+
+<button
+class="open"
+onclick="openChapter(
+'Diversity in the Living World'
+)">
+
+Open Chapter
+
+</button>
+
+</div>
+
+
+<div class="chapter-card">
+
+<h2>
+
+Chapter 3:
+Mindful Eating
+
+</h2>
+
+<p>
+
+Learn about food,
+nutrition and healthy
+eating habits.
+
+</p>
+
+<button
+class="open"
+onclick="openChapter(
+'Mindful Eating'
+)">
+
+Open Chapter
+
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+
+function openChapter(chapter){
+
+localStorage.setItem(
+"mfzSelectedSubject",
+"Class 6 Science"
+);
+
+localStorage.setItem(
+"mfzSelectedChapter",
+chapter
+);
+
+window.location.href=
+"lectures.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
