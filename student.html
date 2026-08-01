@@ -268,7 +268,9 @@ Logout
 
 Welcome,
 <span id="welcomeName">
+
 Student
+
 </span>! 👋
 
 </h1>
@@ -379,26 +381,51 @@ batches will appear here.
 
 <script>
 
-const currentUserText =
+/* SAFE LOCAL STORAGE READER */
 
-localStorage.getItem(
-"mfzCurrentUser"
-);
+function getStorageData(key,defaultValue){
+
+try{
+
+const value =
+
+localStorage.getItem(key);
 
 
-const currentUser =
-
-currentUserText
+return value
 
 ?
 
-JSON.parse(
-currentUserText
-)
+JSON.parse(value)
 
 :
 
-null;
+defaultValue;
+
+}
+
+catch(error){
+
+console.log(error);
+
+return defaultValue;
+
+}
+
+}
+
+
+/* CURRENT USER */
+
+const currentUser =
+
+getStorageData(
+
+"mfzCurrentUser",
+
+null
+
+);
 
 
 if(
@@ -406,43 +433,49 @@ if(
 !currentUser ||
 
 currentUser.role !==
+
 "student"
 
 ){
 
 window.location.href =
+
 "login.html";
 
-}else{
+}
 
 
-document
-.getElementById(
+/* USER NAME */
+
+document.getElementById(
+
 "username"
-)
-.innerText =
+
+).innerText =
 
 currentUser.username;
 
 
-document
-.getElementById(
+document.getElementById(
+
 "welcomeName"
-)
-.innerText =
+
+).innerText =
 
 currentUser.username;
 
+
+/* USERS */
 
 const users =
 
-JSON.parse(
+getStorageData(
 
-localStorage.getItem(
-"mfzUsers"
-)
+"mfzUsers",
 
-) || [];
+[]
+
+);
 
 
 const latestUser =
@@ -452,13 +485,17 @@ users.find(
 user =>
 
 user.username ===
+
 currentUser.username &&
 
 user.role ===
+
 "student"
 
 );
 
+
+/* APPROVED BATCHES */
 
 const approvedBatches =
 
@@ -479,15 +516,17 @@ latestUser.approvedBatches
 [];
 
 
+/* PAYMENT REQUESTS */
+
 const paymentRequests =
 
-JSON.parse(
+getStorageData(
 
-localStorage.getItem(
-"mfzPaymentRequests"
-)
+"mfzPaymentRequests",
 
-) || [];
+[]
+
+);
 
 
 const pendingRequest =
@@ -497,18 +536,24 @@ paymentRequests.find(
 request =>
 
 request.username ===
+
 currentUser.username &&
 
 request.status ===
+
 "pending"
 
 );
 
 
+/* BATCH AREA */
+
 const batchArea =
 
 document.getElementById(
+
 "batchArea"
+
 );
 
 
@@ -538,7 +583,7 @@ batchArea.innerHTML =
 
 <p>
 
-Your payment proof has been submitted.
+Your payment request has been submitted.
 
 </p>
 
@@ -553,7 +598,9 @@ reviewed within 24 hours.
 
 `;
 
-}else{
+}
+
+else{
 
 batchArea.innerHTML =
 
@@ -588,8 +635,9 @@ Explore Courses
 
 }
 
-}else{
+}
 
+else{
 
 let batchHTML =
 
@@ -652,21 +700,54 @@ batchHTML;
 
 }
 
-}
 
+/* OPEN BATCH */
 
 function openBatch(batch){
 
 if(
 
-batch === "Class 6 Batch"
+batch ===
+
+"Class 6 Batch"
 
 ){
 
 window.location.href =
+
 "class6-batch.html";
 
-}else{
+}
+
+else if(
+
+batch ===
+
+"Class 7 Batch"
+
+){
+
+window.location.href =
+
+"class7-batch.html";
+
+}
+
+else if(
+
+batch ===
+
+"Foundation Batch"
+
+){
+
+window.location.href =
+
+"foundation-batch.html";
+
+}
+
+else{
 
 alert(
 
@@ -683,13 +764,18 @@ batch +
 }
 
 
+/* LOGOUT */
+
 function logoutUser(){
 
 localStorage.removeItem(
+
 "mfzCurrentUser"
+
 );
 
 window.location.href =
+
 "login.html";
 
 }
