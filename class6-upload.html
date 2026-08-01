@@ -191,19 +191,7 @@ return;
 }
 
 
-if(
 
-file.size >
-2 * 1024 * 1024
-
-){
-
-message.innerHTML =
-"⚠️ Photo is too large. Please upload a photo below 2 MB.";
-
-return;
-
-}
 
 
 message.innerHTML =
@@ -309,8 +297,163 @@ message.innerHTML =
 };
 
 
-reader.readAsDataURL(
+const image =
+
+new Image();
+
+
+const imageReader =
+
+new FileReader();
+
+
+imageReader.onload =
+
+function(e){
+
+image.onload =
+
+function(){
+
+const canvas =
+
+document.createElement(
+"canvas"
+);
+
+
+let width =
+
+image.width;
+
+
+let height =
+
+image.height;
+
+
+const maxSize =
+
+1600;
+
+
+if(
+
+width > maxSize ||
+
+height > maxSize
+
+){
+
+if(
+
+width > height
+
+){
+
+height =
+
+Math.round(
+
+height *
+maxSize /
+width
+
+);
+
+width =
+
+maxSize;
+
+}else{
+
+width =
+
+Math.round(
+
+width *
+maxSize /
+height
+
+);
+
+height =
+
+maxSize;
+
+}
+
+}
+
+
+canvas.width =
+
+width;
+
+
+canvas.height =
+
+height;
+
+
+const context =
+
+canvas.getContext(
+"2d"
+);
+
+
+context.drawImage(
+
+image,
+
+0,
+
+0,
+
+width,
+
+height
+
+);
+
+
+const compressedProof =
+
+canvas.toDataURL(
+
+"image/jpeg",
+
+0.80
+
+);
+
+
+reader.onload({
+
+target:{
+
+result:
+
+compressedProof
+
+}
+
+});
+
+};
+
+image.src =
+
+e.target.result;
+
+};
+
+
+imageReader.readAsDataURL(
+
 file
+
 );
 
 }
