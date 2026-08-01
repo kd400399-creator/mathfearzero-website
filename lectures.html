@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>MFZ Lectures</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0b1220;
+color:white;
+min-height:100vh;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+background:#111827;
+}
+
+.logo{
+font-size:27px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.back{
+background:#ff9800;
+color:white;
+text-decoration:none;
+padding:10px 18px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.container{
+width:90%;
+max-width:1000px;
+margin:40px auto;
+}
+
+.hero{
+background:#16213e;
+padding:30px;
+border-radius:20px;
+margin-bottom:25px;
+}
+
+.hero h1{
+color:#00d4ff;
+margin-bottom:12px;
+}
+
+.hero p{
+color:#cbd5e1;
+}
+
+.lecture{
+background:#16213e;
+padding:25px;
+border-radius:18px;
+margin-bottom:18px;
+}
+
+.lecture h2{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.lecture p{
+color:#cbd5e1;
+line-height:23px;
+}
+
+.watch{
+margin-top:17px;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+background:#ff9800;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.video-box{
+display:none;
+background:#16213e;
+padding:20px;
+border-radius:18px;
+margin-top:20px;
+}
+
+video{
+width:100%;
+border-radius:12px;
+background:black;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav>
+
+<div class="logo">
+MFZ Learning
+</div>
+
+<a
+class="back"
+id="backButton"
+href="class6-batch.html">
+
+← Back
+
+</a>
+
+</nav>
+
+<main class="container">
+
+<section class="hero">
+
+<h1 id="chapterName">
+
+MFZ Chapter
+
+</h1>
+
+<p id="subjectName">
+
+Subject
+
+</p>
+
+</section>
+
+<div class="lecture">
+
+<h2>
+Lecture 1
+</h2>
+
+<p>
+Chapter introduction
+and important concepts.
+</p>
+
+<button
+class="watch"
+onclick="showVideo(
+'Lecture 1'
+)">
+
+▶ Watch Lecture
+
+</button>
+
+</div>
+
+<div class="lecture">
+
+<h2>
+Lecture 2
+</h2>
+
+<p>
+Detailed explanation
+and examples.
+</p>
+
+<button
+class="watch"
+onclick="showVideo(
+'Lecture 2'
+)">
+
+▶ Watch Lecture
+
+</button>
+
+</div>
+
+<div class="lecture">
+
+<h2>
+Lecture 3
+</h2>
+
+<p>
+Practice questions
+and revision.
+</p>
+
+<button
+class="watch"
+onclick="showVideo(
+'Lecture 3'
+)">
+
+▶ Watch Lecture
+
+</button>
+
+</div>
+
+<div
+class="video-box"
+id="videoBox">
+
+<h2 id="videoTitle">
+
+Lecture
+
+</h2>
+
+<br>
+
+<video
+id="videoPlayer"
+controls>
+
+Your browser does not
+support video playback.
+
+</video>
+
+</div>
+
+</main>
+
+<script>
+
+const subject =
+
+localStorage.getItem(
+"mfzSelectedSubject"
+)
+
+||
+
+"MFZ Subject";
+
+
+const chapter =
+
+localStorage.getItem(
+"mfzSelectedChapter"
+)
+
+||
+
+"MFZ Chapter";
+
+
+document
+.getElementById(
+"subjectName"
+)
+.innerText = subject;
+
+
+document
+.getElementById(
+"chapterName"
+)
+.innerText = chapter;
+
+
+if(
+
+subject ===
+"Class 6 Mathematics"
+
+){
+
+document
+.getElementById(
+"backButton"
+)
+.href =
+"class6-maths.html";
+
+}
+
+
+if(
+
+subject ===
+"Class 6 Science"
+
+){
+
+document
+.getElementById(
+"backButton"
+)
+.href =
+"class6-science.html";
+
+}
+
+
+function showVideo(
+lecture
+){
+
+document
+.getElementById(
+"videoBox"
+)
+.style.display =
+"block";
+
+
+document
+.getElementById(
+"videoTitle"
+)
+.innerText =
+lecture;
+
+
+document
+.getElementById(
+"videoBox"
+)
+scrollIntoView({
+
+behavior:
+"smooth"
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
