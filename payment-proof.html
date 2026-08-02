@@ -119,11 +119,7 @@ text-decoration:none;
 
 <h1>📤 Upload Payment Proof</h1>
 
-<p>
-
-Select your payment screenshot.
-
-</p>
+<p>Select your payment screenshot.</p>
 
 <div class="batch-box">
 
@@ -172,134 +168,88 @@ href="student.html">
 
 <script>
 
-/* SUPABASE */
+/* SUPABASE DETAILS */
 
 const SUPABASE_URL =
-
 "https://vhakvwxsysaohsgbnfun.supabase.co";
 
-
 const SUPABASE_KEY =
-
 "sb_publishable_vDIEuHqMPtpQGbZazghd-A_b6yQ7BMc";
 
-
 const supabaseClient =
-
 window.supabase.createClient(
-
 SUPABASE_URL,
-
 SUPABASE_KEY
-
 );
 
 
 /* USER */
 
 const currentUserText =
-
 localStorage.getItem(
-
 "mfzCurrentUser"
-
 );
 
-
 const currentUser =
-
 currentUserText
-
 ?
-
 JSON.parse(
-
 currentUserText
-
 )
-
 :
-
 null;
 
-
 const selectedBatch =
-
 localStorage.getItem(
-
 "mfzSelectedBatch"
-
 )
-
 ||
-
 "Class 6 Batch";
-
-
-document.getElementById(
-
-"batchName"
-
-).innerText =
-
-selectedBatch;
 
 
 /* ELEMENTS */
 
-const fileInput =
-
+const batchName =
 document.getElementById(
-
-"paymentProof"
-
+"batchName"
 );
 
+const fileInput =
+document.getElementById(
+"paymentProof"
+);
 
 const imagePreview =
-
 document.getElementById(
-
 "imagePreview"
-
 );
-
 
 const submitButton =
-
 document.getElementById(
-
 "submitButton"
-
 );
-
 
 const message =
-
 document.getElementById(
-
 "message"
-
 );
+
+
+batchName.innerText =
+selectedBatch;
 
 
 /* LOGIN CHECK */
 
 if(
-
 !currentUser ||
-
-currentUser.role !==
-"student"
-
+currentUser.role !== "student"
 ){
 
 message.innerHTML =
-
 "❌ Please login as a student.";
 
 submitButton.disabled =
-
 true;
 
 }
@@ -308,118 +258,82 @@ true;
 /* IMAGE PREVIEW */
 
 fileInput.addEventListener(
-
 "change",
-
 function(){
 
 const file =
-
 fileInput.files[0];
 
-
 if(
-
 !file
-
 ){
 
 imagePreview.style.display =
-
 "none";
 
 return;
 
 }
 
-
 if(
-
 file.size >
-
 50 * 1024 * 1024
-
 ){
 
 message.innerHTML =
-
 "❌ Image must be 50 MB or smaller.";
 
 fileInput.value =
-
 "";
 
 imagePreview.style.display =
-
 "none";
 
 return;
 
 }
 
-
 imagePreview.src =
-
 URL.createObjectURL(
-
 file
-
 );
 
-
 imagePreview.style.display =
-
 "block";
 
-
 message.innerHTML =
-
 "";
 
 }
-
 );
 
 
-/* SUBMIT */
+/* SUBMIT PAYMENT */
 
 submitButton.addEventListener(
-
 "click",
-
 async function(){
 
 const file =
-
 fileInput.files[0];
 
-
 if(
-
 !file
-
 ){
 
 message.innerHTML =
-
 "⚠️ Please select a payment screenshot.";
 
 return;
 
 }
 
-
 if(
-
-file.size >
-
-50 * 1024 * 1024
-
+!currentUser
 ){
 
 message.innerHTML =
-
-"❌ Image must be 50 MB or smaller.";
+"❌ Login session not found.";
 
 return;
 
@@ -427,110 +341,80 @@ return;
 
 
 submitButton.disabled =
-
 true;
 
-
 submitButton.innerText =
-
 "Uploading...";
 
-
 message.innerHTML =
-
-"⏳ Uploading payment proof to cloud...";
+"⏳ Uploading screenshot...";
 
 
 const safeUsername =
-
-currentUser.username.replace(
-
+String(
+currentUser.username
+)
+.replace(
 /[^a-zA-Z0-9_-]/g,
-
 "_"
-
 );
 
 
 const safeFileName =
-
 file.name.replace(
-
 /[^a-zA-Z0-9._-]/g,
-
 "_"
-
 );
 
 
 const filePath =
-
 safeUsername +
-
 "/" +
-
 Date.now() +
-
 "-" +
-
 safeFileName;
 
 
-/* UPLOAD IMAGE */
+/* UPLOAD TO STORAGE */
 
-const uploadResult =
-
-await supabaseClient
-
-.storage
-
-.from(
-
-"payment-proofs"
-
-)
-
-.upload(
-
-filePath,
-
-file,
-
-{
-
-contentType:
-
-file.type,
-
-upsert:
-
-false
-
+const {
+data: uploadData,
+error: uploadError
 }
-
+=
+await supabaseClient
+.storage
+.from(
+"payment-proofs"
+)
+.upload(
+filePath,
+file,
+{
+contentType:
+file.type,
+upsert:
+false
+}
 );
 
 
 if(
-
-uploadResult.error
-
+uploadError
 ){
 
+console.log(
+uploadError
+);
+
 message.innerHTML =
-
 "❌ Upload failed: " +
-
-uploadResult.error.message;
-
+uploadError.message;
 
 submitButton.disabled =
-
 false;
 
-
 submitButton.innerText =
-
 "Submit Payment Proof";
 
 return;
@@ -538,109 +422,80 @@ return;
 }
 
 
-/* GET PUBLIC URL */
+/* GET PUBLIC LINK */
 
-const urlResult =
-
+const {
+data: publicData
+}
+=
 supabaseClient
-
 .storage
-
 .from(
-
 "payment-proofs"
-
 )
-
 .getPublicUrl(
-
 filePath
-
 );
 
 
 const proofURL =
+publicData.publicUrl;
 
-urlResult.data.publicUrl;
 
-
-/* SAVE TO SUPABASE DATABASE */
+/* SAVE TO DATABASE */
 
 message.innerHTML =
-
 "⏳ Saving payment request...";
 
 
-const databaseResult =
-
+const {
+data: databaseData,
+error: databaseError
+}
+=
 await supabaseClient
-
 .from(
-
 "payment_requests"
-
 )
-
 .insert(
-
 [
-
 {
-
 username:
-
 currentUser.username,
 
 batch:
-
 selectedBatch,
 
 proof_url:
-
 proofURL,
 
 file_name:
-
 file.name,
 
 status:
-
 "pending"
-
 }
-
 ]
-
-);
+)
+.select();
 
 
 if(
-
-databaseResult.error
-
+databaseError
 ){
 
 console.log(
-
-databaseResult.error
-
+databaseError
 );
 
-
 message.innerHTML =
-
-"❌ Screenshot uploaded, but request could not be saved: " +
-
-databaseResult.error.message;
-
+"❌ Database error: " +
+databaseError.message;
 
 submitButton.disabled =
-
 false;
 
-
 submitButton.innerText =
-
 "Submit Payment Proof";
 
 return;
@@ -650,32 +505,28 @@ return;
 
 /* SUCCESS */
 
-message.innerHTML =
+console.log(
+databaseData
+);
 
+message.innerHTML =
 "✅ Payment proof submitted successfully!";
 
-
 submitButton.innerText =
-
 "Submitted ✓";
 
 
 setTimeout(
-
 function(){
 
 window.location.href =
-
 "student.html";
 
 },
-
 1500
-
 );
 
 }
-
 );
 
 </script>
