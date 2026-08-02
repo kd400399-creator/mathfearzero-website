@@ -289,7 +289,8 @@ if(
 
 !currentUser ||
 
-currentUser.role !== "student"
+currentUser.role !==
+"student"
 
 ){
 
@@ -475,7 +476,7 @@ Date.now() +
 safeFileName;
 
 
-/* CLOUD UPLOAD */
+/* UPLOAD IMAGE */
 
 const uploadResult =
 
@@ -537,7 +538,7 @@ return;
 }
 
 
-/* GET CLOUD URL */
+/* GET PUBLIC URL */
 
 const urlResult =
 
@@ -563,41 +564,28 @@ const proofURL =
 urlResult.data.publicUrl;
 
 
-/* SAVE REQUEST */
+/* SAVE TO SUPABASE DATABASE */
 
-const requestsText =
+message.innerHTML =
 
-localStorage.getItem(
-
-"mfzPaymentRequests"
-
-);
+"⏳ Saving payment request...";
 
 
-const requests =
+const databaseResult =
 
-requestsText
+await supabaseClient
 
-?
+.from(
 
-JSON.parse(
-
-requestsText
+"payment_requests"
 
 )
 
-:
+.insert(
 
-[];
-
-
-const paymentRequest =
+[
 
 {
-
-id:
-
-Date.now(),
 
 username:
 
@@ -607,50 +595,64 @@ batch:
 
 selectedBatch,
 
-proof:
+proof_url:
 
 proofURL,
 
-fileName:
+file_name:
 
 file.name,
 
 status:
 
-"pending",
+"pending"
 
-submittedAt:
+}
 
-new Date()
-
-.toLocaleString()
-
-};
-
-
-requests.push(
-
-paymentRequest
+]
 
 );
 
 
-localStorage.setItem(
+if(
 
-"mfzPaymentRequests",
+databaseResult.error
 
-JSON.stringify(
+){
 
-requests
+console.log(
 
-)
+databaseResult.error
 
 );
 
 
 message.innerHTML =
 
-"✅ Payment proof uploaded successfully!";
+"❌ Screenshot uploaded, but request could not be saved: " +
+
+databaseResult.error.message;
+
+
+submitButton.disabled =
+
+false;
+
+
+submitButton.innerText =
+
+"Submit Payment Proof";
+
+return;
+
+}
+
+
+/* SUCCESS */
+
+message.innerHTML =
+
+"✅ Payment proof submitted successfully!";
 
 
 submitButton.innerText =
