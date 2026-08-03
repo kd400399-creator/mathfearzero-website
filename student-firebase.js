@@ -8,46 +8,90 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
 
 
-console.log(
-  "MFZ Firebase connected successfully!"
+document.addEventListener(
+
+  "DOMContentLoaded",
+
+  async function(){
+
+    const testBox =
+
+    document.createElement(
+
+      "div"
+
+    );
+
+
+    testBox.innerHTML =
+
+    "⏳ Firebase connecting...";
+
+
+    testBox.style.cssText =
+
+    `
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    background:#16213e;
+    color:white;
+    padding:14px 18px;
+    border:2px solid #00d4ff;
+    border-radius:10px;
+    z-index:99999;
+    font-family:Arial;
+    font-weight:bold;
+    `;
+
+
+    document.body.appendChild(
+
+      testBox
+
+    );
+
+
+    try{
+
+      await getDocs(
+
+        collection(
+
+          db,
+
+          "payment_requests"
+
+        )
+
+      );
+
+
+      testBox.innerHTML =
+
+      "✅ Firebase Connected";
+
+
+      testBox.style.borderColor =
+
+      "#19a463";
+
+    }
+
+    catch(error){
+
+      testBox.innerHTML =
+
+      "❌ Firebase Error";
+
+      console.error(
+
+        error
+
+      );
+
+    }
+
+  }
+
 );
-
-
-async function testFirebase() {
-
-  try {
-
-    const snapshot =
-    await getDocs(
-      collection(
-        db,
-        "payment_requests"
-      )
-    );
-
-
-    console.log(
-      "Firebase is working."
-    );
-
-
-    console.log(
-      "Payment requests:",
-      snapshot.size
-    );
-
-  }
-
-  catch(error) {
-
-    console.error(
-      "Firebase error:",
-      error
-    );
-
-  }
-
-}
-
-
-testFirebase();
