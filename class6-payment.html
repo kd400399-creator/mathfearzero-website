@@ -6,9 +6,11 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>MFZ Class 6 Payment</title>
+<title>MFZ Payment</title>
 
 <style>
 
@@ -45,6 +47,7 @@ color:white;
 text-decoration:none;
 padding:10px 18px;
 border-radius:8px;
+font-weight:bold;
 }
 
 .payment-box{
@@ -54,11 +57,12 @@ padding:35px;
 background:#16213e;
 border-radius:22px;
 text-align:center;
+border:1px solid #263248;
 }
 
 .payment-box h1{
 color:#00d4ff;
-font-size:34px;
+font-size:32px;
 margin-bottom:15px;
 }
 
@@ -66,6 +70,11 @@ margin-bottom:15px;
 color:#d4d4d4;
 line-height:26px;
 margin:12px 0;
+}
+
+.batch-name{
+color:#00d4ff;
+font-weight:bold;
 }
 
 .price{
@@ -120,42 +129,75 @@ color:#bfc7d5;
 <nav>
 
 <div class="logo">
-MFZ
+
+MFZ Learning
+
 </div>
 
-<a class="back" href="class6.html">
+<a
+class="back"
+href="classes.html">
+
 ← Back
+
 </a>
 
 </nav>
 
+
 <section class="payment-box">
 
-<h1>📘 Class 6 Batch Payment</h1>
+<h1>
+
+💳 Batch Payment
+
+</h1>
 
 <p>
-MFZ Class 6 Maths + Science Batch
+
+Selected Batch:
+
+</p>
+
+<p
+class="batch-name"
+id="batchName">
+
+Class 6 Batch
+
 </p>
 
 <div class="price">
-₹10 Only
+
+₹99 / Year
+
 </div>
 
 <p>
-नीचे दिए गए QR Code को scan करके ₹10 का payment करें।
+
+नीचे दिए गए QR Code को scan करके
+₹99 का payment करें।
+
 </p>
 
 <div class="qr-box">
-<img src="payment-qr.jpg" alt="MFZ Payment QR">
 
+<img
+src="payment-qr.jpg"
+alt="MFZ Payment QR">
 
 </div>
 
 <p>
-Payment पूरा होने के बाद नीचे <b>Next</b> दबाएँ।
+
+Payment पूरा होने के बाद
+नीचे Next दबाएँ।
+
 </p>
 
-<button class="next" onclick="goNext()">
+<button
+class="next"
+onclick="goToGoogleForm()">
 
 Next →
 
@@ -163,18 +205,44 @@ Next →
 
 <p class="note">
 
-Payment screenshot अगले page पर upload करना होगा।
-Payment verify होने के बाद batch अधिकतम 24 घंटे के अंदर activate किया जाएगा।
+Next दबाने पर payment details वाला
+Google Form खुलेगा। वहाँ अपनी details
+और payment screenshot submit करें।
 
 </p>
 
 </section>
 
+
 <script>
 
-function goNext(){
+const selectedBatch =
 
-window.location.href="class6-upload.html";
+localStorage.getItem(
+
+"mfzSelectedBatch"
+
+)
+
+||
+
+"Class 6 Batch";
+
+
+document.getElementById(
+
+"batchName"
+
+).innerText =
+
+selectedBatch;
+
+
+function goToGoogleForm(){
+
+window.location.href =
+
+"PASTE_GOOGLE_FORM_LINK_HERE";
 
 }
 
